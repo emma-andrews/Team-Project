@@ -3,11 +3,19 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+class Levels {
+private:
+    sf::Sprite lSprite;
+    sf::Texture lTexture;
 
-class Box {
 public:
-    struct Box {};
-    Box(std::Vector2 center, std::Vector2 halfSize);
+    int levelNum = 1;
+    Levels();
+    bool checkCollision(sf::Sprite player);//use player.getSprite
+    sf::RectangleShape getPlatforms(int index);
+    void popPlat();
+    bool isEmpty();
+    std::vector<sf::RectangleShape> platforms;
 };
 
 #endif //TEAMPROJECT_LEVELS_H

@@ -53,6 +53,9 @@ void Engine::draw() {
     window.clear(sf::Color::White);
     window.draw(backgroundSprite);
     window.draw(player.getSprite());
+    for (unsigned i = 0; i < level.platforms.size(); i++) {
+        window.draw(level.platforms[i]);
+    }
     window.display();
 }
 
