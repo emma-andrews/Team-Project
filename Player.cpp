@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "Levels.h"
 
 Player::Player() {
     pSpeed = 400;
@@ -7,7 +8,7 @@ Player::Player() {
     pSprite.setTexture(pTexture);
     pSprite.setScale(2,2);
     pPosition.x = 500;
-    pPosition.y = 920;
+    pPosition.y = 100;
 }
 
 sf::Sprite Player::getSprite() {
@@ -30,10 +31,25 @@ void Player::stopRight() {
     pRightPressed = false;
 }
 
-void Player::update(float elapsedTime) {
+void Player::jump() {
+    pJump = true;
+}
+
+void Player::stopJump() {
+    pJump = false;
+}
+
+void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats) {
     if (pRightPressed)
         pPosition.x += pSpeed * elapsedTime;
     if (pLeftPressed)
         pPosition.x -= pSpeed * elapsedTime;
+    if (pJump) {
+        pPosition.y += pSpeed * elapsedTime;
+    }
+    if (collision >= 0) {
+        pPosition.y = plats[collision].getGlobalBounds().top;
+    }
+
     pSprite.setPosition(pPosition);
 }

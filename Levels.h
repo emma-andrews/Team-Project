@@ -2,6 +2,7 @@
 #define TEAMPROJECT_LEVELS_H
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 
 class Levels {
 private:
@@ -11,7 +12,7 @@ private:
 public:
     int levelNum = 1;
     Levels();
-    bool checkCollision(sf::Sprite player);//use player.getSprite
+    int checkCollision(sf::Sprite player);//use player.getSprite
     sf::RectangleShape getPlatforms(int index);
     void popPlat();
     bool isEmpty();

@@ -1,11 +1,12 @@
 #include "Engine.h"
+#include <SFML/Graphics.hpp>
 
 Engine::Engine() {
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
     resolution.y = sf::VideoMode::getDesktopMode().height;
 
-    window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Titlebar);
+    window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Fullscreen);
     //creates the window
     backgroundTexture.loadFromFile("cyberpunk-street.png");//608 by 192
     backgroundSprite.setTexture(backgroundTexture);
@@ -43,10 +44,17 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
     else {
         player.stopRight();//does not move right when anything other than D is pressed
     }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        player.jump();
+    }
+    else {
+        player.stopJump();
+    }
 }
 
 void Engine::update(float dtAsSeconds) {
-    player.update(dtAsSeconds);
+    int col = level.checkCollision(player.getSprite());
+    player.update(dtAsSeconds, col, level.platforms);
 }
 
 void Engine::draw() {

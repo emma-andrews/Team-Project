@@ -23,8 +23,13 @@ Levels::Levels() {
     }
 }
 
-bool Levels::checkCollision(sf::Sprite player) {
-    return true;//add collisions
+int Levels::checkCollision(sf::Sprite player) {
+    for (unsigned i = 0; i < platforms.size(); i++) {
+        if (player.getGlobalBounds().intersects(platforms[i].getGlobalBounds())) {
+            return i;
+        }
+    }
+    return -1;//add collisions
 }
 
 sf::RectangleShape Levels::getPlatforms(int index) {
