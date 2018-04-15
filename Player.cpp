@@ -48,7 +48,7 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         pPosition.y += pSpeed * elapsedTime;
     }
     if (collision >= 0) {
-        pPosition.y = plats[collision].getGlobalBounds().top;
+        pPosition.y = (plats[collision].getGlobalBounds().top - plats[collision].getGlobalBounds().height);
     }
 
     pSprite.setPosition(pPosition);

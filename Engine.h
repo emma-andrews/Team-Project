@@ -10,6 +10,9 @@ private:
     sf::RenderWindow window;
     sf::Sprite backgroundSprite;
     sf::Texture backgroundTexture;
+    sf::Text levelText;
+    sf::Text livesText;
+    sf::Font font;
     Player player;
     Levels level;
     void input();
