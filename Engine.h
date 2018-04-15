@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "Player.h"
-#include "Levels.h"
 
 class Engine {
 private:
@@ -14,7 +13,6 @@ private:
     sf::Text livesText;
     sf::Font font;
     Player player;
-    Levels level;
     void input();
     void update(float dtAsSeconds);
     void draw();
