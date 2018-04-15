@@ -9,10 +9,14 @@ private:
     sf::Vector2f pPosition;
     sf::Sprite pSprite;
     sf::Texture pTexture;
+
     bool pLeftPressed;
     bool pRightPressed;
     bool pJump;
+
     float pSpeed;
+    int lives = 3;
+
 public:
     Player();
     sf::Sprite getSprite();

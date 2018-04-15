@@ -8,7 +8,7 @@ Player::Player() {
     pSprite.setTexture(pTexture);
     pSprite.setScale(2,2);
     pPosition.x = 500;
-    pPosition.y = 100;
+    pPosition.y = 1000;
 }
 
 sf::Sprite Player::getSprite() {
