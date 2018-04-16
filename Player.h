@@ -3,12 +3,15 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Levels.h"
+#include "Animation.h"
 
 class Player {
 private:
     sf::Vector2f pPosition;
     sf::Sprite pSprite;
     sf::Texture pTexture;
+
+    Animation animation;
 
     bool pLeftPressed;
     bool pRightPressed;

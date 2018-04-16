@@ -21,6 +21,7 @@ Engine::Engine() {
     livesText.setFont(font);
     finishText.setFont(font);
     endplatText.setFont(font);
+    timeText.setFont(font);
 
     levelText.setString("Level 1");//need to increase level count when they reach the next level
     livesText.setString("Lives Remaining: 3");//need to update when player is hit by an enemy
@@ -41,15 +42,30 @@ Engine::Engine() {
     livesText.setPosition(20, 50);
     finishText.setPosition(900, 500);//temporary position, needs to be updated to be somewhat in the middle of the screen
     endplatText.setPosition(1705, 170);
+
+    sf::Vector2f timePosition;
+    timePosition.x = 400;
+    timePosition.y = 80;
+    timeRect.setSize(timePosition);
+    timeRect.setFillColor(sf::Color::Yellow);
+    timeRect.setPosition((resolution.x / 2) - (timePosition.x / 2), 980);
+
+    closeText.setFont(font);
+    closeText.setString("Do you want to exit the game?\nYES: Y\tNO: N");
+    closeText.setCharacterSize(40);
+    closeText.setPosition(560, 540);
+    closeText.setFillColor(sf::Color::White);
 }
 
 void Engine::start() {//starts the game
     sf::Clock clock;
     levelFinished = false;
     level.generatePlat();
+    gameTime = clock.restart();
     while (window.isOpen()) {//updates the game every second
         sf::Time dt = clock.restart();
         float dtAsSeconds = dt.asSeconds();
+        lGameTime = gameTime.asSeconds();
         input();
         update(dtAsSeconds);
         draw();
@@ -61,26 +77,11 @@ void Engine::nextLevel() {
 
     start();
 }
-
+bool open = true;
 void Engine::input() {//calculates user inputs and what actions are performed based on input
-    sf::Clock ingameClock;
-    sf::Text closeText;
-    closeText.setFont(font);
-    closeText.setString("Do you want to exit the game?\nYES: Y\tNO: N");
-    closeText.setCharacterSize(40);
-    closeText.setPosition(960, 540);
-    closeText.setFillColor(sf::Color::White);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        window.close();
-//        window.draw(closeText);
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
-//            window.close();
-//        }
-//        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
-//            window.clear();
-//            draw();
-//        }
-        //closes game when escape is pressed
+        //window.close();
+        open = false;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
@@ -102,6 +103,14 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
     else {
         player.stopJump();
     }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && !open) {
+        window.close();
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && !open) {
+        open = true;
+        window.clear();
+        draw();
+    }
 }
 
 void Engine::update(float dtAsSeconds) {
@@ -122,6 +131,10 @@ void Engine::draw() {//draws everything to the screen, called every second in up
     window.draw(levelText);
     window.draw(livesText);
     window.draw(endplatText);
+
+    if(!open){
+        window.draw(closeText);
+    }
     window.display();
 
     if (levelFinished) {

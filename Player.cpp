@@ -44,6 +44,7 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         pPosition.x += pSpeed * elapsedTime;
         if (pPosition.x >= sf::VideoMode::getDesktopMode().width - 64)
             pPosition.x = sf::VideoMode::getDesktopMode().width - 74;
+        animation.playerRun(elapsedTime, getSprite());
     }
     if (pLeftPressed) {
         pPosition.x -= pSpeed * elapsedTime;

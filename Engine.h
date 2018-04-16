@@ -11,17 +11,22 @@ private:
     sf::Sprite backgroundSprite;
     sf::Texture backgroundTexture;
     sf::Event event;
+    sf::RectangleShape timeRect;
+    sf::Time gameTime;
 
     sf::Text levelText;
     sf::Text livesText;
     sf::Text finishText;
     sf::Text endplatText;
+    sf::Text timeText;
+    sf::Text closeText;
     sf::Font font;
 
     Player player;
     Levels level;
 
     bool levelFinished;
+    float lGameTime;
     void input();
     void update(float dtAsSeconds);
     void draw();
