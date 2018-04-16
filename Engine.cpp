@@ -63,8 +63,24 @@ void Engine::nextLevel() {
 }
 
 void Engine::input() {//calculates user inputs and what actions are performed based on input
+    sf::Clock ingameClock;
+    sf::Text closeText;
+    closeText.setFont(font);
+    closeText.setString("Do you want to exit the game?\nYES: Y\tNO: N");
+    closeText.setCharacterSize(40);
+    closeText.setPosition(960, 540);
+    closeText.setFillColor(sf::Color::White);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        window.close();//closes game when escape is pressed
+        window.close();
+//        window.draw(closeText);
+//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
+//            window.close();
+//        }
+//        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+//            window.clear();
+//            draw();
+//        }
+        //closes game when escape is pressed
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
@@ -73,11 +89,9 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
     else {
         player.stopLeft();//does not move left when anything other than A is pressed
     }
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         player.moveRight();//moves right when D is pressed
     }
-
     else {
         player.stopRight();//does not move right when anything other than D is pressed
     }
@@ -112,6 +126,7 @@ void Engine::draw() {//draws everything to the screen, called every second in up
 
     if (levelFinished) {
         window.draw(finishText);
+        //create a pause so that text is displayed and not immediately cleared
         window.clear();
         level.popPlat();
         nextLevel();

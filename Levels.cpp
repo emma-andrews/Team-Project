@@ -23,7 +23,7 @@ Levels::Levels() {
     //lTexture.loadFromFile("pixil-frame-0.png");
 
     plat1.setFillColor(sf::Color(107, 19, 66));
-    ground.setFillColor(sf::Color::Magenta);
+    ground.setFillColor(sf::Color::Magenta);//change to transparent later, set as this just to see where it is when testing
     finishPlat.setFillColor(sf::Color(107, 19, 66));
     ceiling.setFillColor(sf::Color::Magenta);
 

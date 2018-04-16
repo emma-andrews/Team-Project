@@ -10,6 +10,7 @@ private:
     sf::RenderWindow window;
     sf::Sprite backgroundSprite;
     sf::Texture backgroundTexture;
+    sf::Event event;
 
     sf::Text levelText;
     sf::Text livesText;
