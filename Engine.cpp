@@ -20,22 +20,27 @@ Engine::Engine() {
     levelText.setFont(font);
     livesText.setFont(font);
     finishText.setFont(font);
+    endplatText.setFont(font);
 
     levelText.setString("Level 1");//need to increase level count when they reach the next level
     livesText.setString("Lives Remaining: 3");//need to update when player is hit by an enemy
     finishText.setString("Level Complete!");
+    endplatText.setString("FINISH");
 
     levelText.setCharacterSize(30);
     livesText.setCharacterSize(30);
     finishText.setCharacterSize(75);
+    endplatText.setCharacterSize(25);
 
     levelText.setFillColor(sf::Color::White);
     livesText.setFillColor(sf::Color::White);
     finishText.setFillColor(sf::Color::White);
+    endplatText.setFillColor(sf::Color(255, 162, 40));
 
     levelText.setPosition(20, 20);
     livesText.setPosition(20, 50);
     finishText.setPosition(900, 500);//temporary position, needs to be updated to be somewhat in the middle of the screen
+    endplatText.setPosition(1705, 170);
 }
 
 void Engine::start() {//starts the game
@@ -95,12 +100,16 @@ void Engine::draw() {//draws everything to the screen, called every second in up
     window.clear(sf::Color::White);
     window.draw(backgroundSprite);
     window.draw(player.getSprite());
+
     for (unsigned i = 0; i < level.platforms.size(); i++) {
         window.draw(level.platforms[i]);
     }
+
     window.draw(levelText);
     window.draw(livesText);
+    window.draw(endplatText);
     window.display();
+
     if (levelFinished) {
         window.draw(finishText);
         window.clear();

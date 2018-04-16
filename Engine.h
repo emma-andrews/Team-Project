@@ -14,6 +14,7 @@ private:
     sf::Text levelText;
     sf::Text livesText;
     sf::Text finishText;
+    sf::Text endplatText;
     sf::Font font;
 
     Player player;

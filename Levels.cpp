@@ -1,65 +1,51 @@
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <ctime>
 #include "Levels.h"
 
 Levels::Levels() {
+    srand(time(nullptr));
     sf::Vector2f cPosition;
-    sf::Vector2f sPosition;
-
     sf::RectangleShape ceiling;
-    sf::RectangleShape side;
 
     cPosition.x = 1920;
     cPosition.y = 10;
 
-    sPosition.x = 10;
-    sPosition.y = 1080;
-
-    tposition.x = 75;
+    tposition.x = 100;
     tposition.y = 25;
 
     gPosition.x = 1920;
-    gPosition.y = 10;
+    gPosition.y = 20;
 
     fPosition.x = 100;
     fPosition.y = 25;
 
-    //lTexture.loadFromFile("pixil - frame - 0.png");
+    //lTexture.loadFromFile("pixil-frame-0.png");
 
     plat1.setFillColor(sf::Color(107, 19, 66));
     ground.setFillColor(sf::Color::Magenta);
     finishPlat.setFillColor(sf::Color(107, 19, 66));
     ceiling.setFillColor(sf::Color::Magenta);
-    side.setFillColor(sf::Color::Magenta);
 
     plat1.setSize(tposition);
     ground.setSize(gPosition);
     finishPlat.setSize(fPosition);
     ceiling.setSize(cPosition);
-    side.setSize(sPosition);
 
-    tposition.y = 800;
-    fPosition.x = 1800;
-    fPosition.y = 150;
-    gPosition.y = 1080;
+    tposition.y = 900;
+    fPosition.x = 1700;
+    fPosition.y = 200;
+    gPosition.x = 0;
+    gPosition.y = 1070;
     cPosition.x = 0;
     cPosition.y = 0;
-    sPosition.x = 0;
-    sPosition.y = 0;
 
     ground.setPosition(gPosition);
     ceiling.setPosition(cPosition);
-    side.setPosition(sPosition);
     finishPlat.setPosition(fPosition);
 
     platforms.push_back(ground);
-    platforms.push_back(ceiling);
-    platforms.push_back(side);
-
-    sPosition.x = 1920;
-    sPosition.y = 0;
-    side.setPosition(sPosition);
-
-    platforms.push_back(side);
+    //platforms.push_back(ceiling);
     platforms.push_back(finishPlat);
 }
 
@@ -90,7 +76,7 @@ bool Levels::isEmpty() {
 }
 
 bool Levels::checkFinished(sf::Sprite player) {
-    if (player.getGlobalBounds().intersects(platforms[4].getGlobalBounds())) {//finish platform is located at index 4 in platforms, static index
+    if (player.getGlobalBounds().intersects(platforms[1].getGlobalBounds())) {//finish platform is located at index 4 in platforms, static index
         return true;
     }
     else
@@ -98,10 +84,16 @@ bool Levels::checkFinished(sf::Sprite player) {
 }
 
 void Levels::generatePlat() {
-    for (int i = 0; i < (levelNum * 5); i++) {
+    for (int i = 0; i < 17; i++) {
         plat1.setPosition(tposition);
         platforms.push_back(plat1);
-        tposition.x += 60;
-        tposition.y -= 60;
+
+        tposition.x += rand() % 100 + 100;//will have to check if its possible to reach some of these offsets once jumping is implemented
+        if (tposition.x > 1800)
+            tposition.x = rand() % 100 + 1;
+
+        tposition.y = rand() % 1000 - 300;
+        if (tposition.y < 50)
+            tposition.y = rand() % 700 + 100;
     }
 }
