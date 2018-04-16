@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Levels.h"
-
+#include <vector>
+const float maxY = 2.5f;
+const sf::Vector2f gravity(0.f, 5.f);
+sf::Vector2f velocity(2.f, 5.f);
 Player::Player() {
     pSpeed = 400;
     pTexture.loadFromFile("32 x 32 platform character_idle_0.png");
@@ -52,7 +55,12 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
             pPosition.x = 10;
     }
     if (pJump) {
-        pPosition.y += pSpeed * elapsedTime;
+        if (pPosition.y > 0) {
+            pPosition.y -= maxY;
+        }
+        else if (pPosition.y == 0) {
+            pPosition.y += maxY;
+        }
     }
     if (collision >= 0) {
         pPosition.y = (plats[collision].getGlobalBounds().top - plats[collision].getGlobalBounds().height);

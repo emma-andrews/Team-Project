@@ -8,6 +8,7 @@
 class Player {
 private:
     sf::Vector2f pPosition;
+    sf::Vector2f pVelocity;
     sf::Sprite pSprite;
     sf::Texture pTexture;
 
