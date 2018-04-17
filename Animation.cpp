@@ -13,12 +13,13 @@ std::vector<sf::IntRect> Animation::playerIdle() {
         vect.push_back(idleSource);
         idleSource.left += 30;
     }
+    return vect;
 }
 
 std::vector<sf::IntRect> Animation::playerRun() {
     std::vector<sf::IntRect> vect;
     sf::IntRect runSource(0, 40, 30, 40);
-    while (runSource.left <= 180) {
+    while (runSource.left <= 150) {
         vect.push_back(runSource);
         runSource.left += 30;
     }

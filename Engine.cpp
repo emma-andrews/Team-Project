@@ -59,18 +59,16 @@ Engine::Engine() {
 
 void Engine::start() {//starts the game
     sf::Clock clock;
-    sf::Clock aniClock;
     levelFinished = false;
     level.generatePlat();
     gameTime = clock.restart();
+
     while (window.isOpen()) {//updates the game every second
         sf::Time dt = clock.restart();
-        sf::Time da = aniClock.restart();
         float dtAsSeconds = dt.asSeconds();
-        float daAsSeconds = da.asSeconds();
         lGameTime = gameTime.asSeconds();
         input();
-        update(dtAsSeconds, daAsSeconds);
+        update(dtAsSeconds);
         draw();
     }
 }
@@ -115,9 +113,9 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
     }
 }
 
-void Engine::update(float dtAsSeconds, float daAsSeconds) {
+void Engine::update(float dtAsSeconds) {
     int col = level.checkCollision(player.getSprite());
-    player.update(dtAsSeconds, daAsSeconds, col, level.platforms);
+    player.update(dtAsSeconds, col, level.platforms);
     levelFinished = level.checkFinished(player.getSprite());
 }
 

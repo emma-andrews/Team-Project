@@ -11,6 +11,7 @@ private:
     sf::Vector2f pVelocity;
     sf::Sprite pSprite;
     sf::Texture pTexture;
+    std::vector<sf::IntRect> aniRect;
 
     Animation animation;
 
@@ -21,11 +22,16 @@ private:
     bool platJump;
 
     float pSpeed;
-    int lives = 3;
+    int lives;
+    int rFrame;
+    int lFrame;
+    int iFrame;
 
 public:
+    sf::Clock aniClock;
+    sf::Time da;
     Player();
-    void setSprite(sf::IntRect aniRect);
+    //void setSprite(sf::IntRect aniRect);
     sf::Sprite getSprite();
     void setPosition();
     void moveLeft();
@@ -34,7 +40,7 @@ public:
     void stopRight();
     void jump();
     void stopJump();
-    void update(float elapsedTime, float aniElapsed, int collision, std::vector<sf::RectangleShape> plats);
+    void update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats);
 };
 
 #endif //TEAMPROJECT_PLAYER_H

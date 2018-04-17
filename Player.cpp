@@ -7,6 +7,10 @@ const float gravity = 30.0f;
 sf::IntRect textRect(0, 0, 30, 40);
 Player::Player() {
     pSpeed = 400;
+    rFrame = 0;
+    lFrame = 0;
+    iFrame = 0;
+    lives = 3;
 
     pTexture.loadFromFile("player character sheet.png");
     pSprite.setTexture(pTexture);
@@ -16,9 +20,9 @@ Player::Player() {
     pPosition.y = 800;
 }
 
-void Player::setSprite(sf::IntRect aniRect) {
-    pSprite.setTextureRect(aniRect);
-}
+//void Player::setSprite(sf::IntRect aniRect) {
+//    pSprite.setTextureRect(aniRect);
+//}
 
 sf::Sprite Player::getSprite() {
     return pSprite;
@@ -61,7 +65,7 @@ void Player::stopJump() {
     }
 }
 
-void Player::update(float elapsedTime, float aniElapsed, int collision, std::vector<sf::RectangleShape> plats) {
+void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats) {
     pPosition.x += pVelocity.x * elapsedTime;
     pPosition.y += pVelocity.y * gravity * elapsedTime * 3;
     pVelocity.y += gravity * elapsedTime;
@@ -73,20 +77,32 @@ void Player::update(float elapsedTime, float aniElapsed, int collision, std::vec
         pPosition.x += pSpeed * elapsedTime;
         if (pPosition.x >= sf::VideoMode::getDesktopMode().width - 64)
             pPosition.x = sf::VideoMode::getDesktopMode().width - 74;
-        //animation.playerRun();
-        //if (elapsedTime > 0.5f) {
-//        textRect.top = 40;
-//        if(textRect.left >= 180)
-//            textRect.left = 30;
-//        else
-//            textRect.left += 30;
-//        pSprite.setTextureRect(textRect);
-        //}
+
+        if (aniClock.getElapsedTime().asSeconds() > 0.1f) {
+            aniRect = animation.playerRun();
+            pSprite.setTextureRect(aniRect[rFrame]);
+            rFrame++;
+            if (rFrame >= aniRect.size()) {
+                rFrame = 0;
+            }
+            aniClock.restart();
+        }
     }
+
     if (pLeftPressed) {
         pPosition.x -= pSpeed * elapsedTime;
         if (pPosition.x <= 0)
             pPosition.x = 10;
+
+        if (aniClock.getElapsedTime().asSeconds() > 0.1f) {
+            aniRect = animation.playerRun();
+            pSprite.setTextureRect(aniRect[lFrame]);
+            lFrame++;
+            if (lFrame >= aniRect.size()) {
+                lFrame = 0;
+            }
+            aniClock.restart();
+        }
     }
     if (pJump && canJump) {
         if (pPosition.y > 0) {
