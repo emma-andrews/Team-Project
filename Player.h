@@ -30,7 +30,7 @@ public:
     void stopRight();
     void jump();
     void stopJump();
-    void update(float elapsedTime);
+    void update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats);
 };
 
 #endif //TEAMPROJECT_PLAYER_H
