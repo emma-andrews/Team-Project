@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Levels.h"
+#include "Coin.h"
 
 class Engine {
 private:
@@ -24,6 +25,7 @@ private:
 
     Player player;
     Levels level;
+    Coin coin;
 
     bool levelFinished;
     float lGameTime;

@@ -117,12 +117,14 @@ void Engine::update(float dtAsSeconds) {
     int col = level.checkCollision(player.getSprite());
     player.update(dtAsSeconds, col, level.platforms);
     levelFinished = level.checkFinished(player.getSprite());
+    coin.update();
 }
 
 void Engine::draw() {//draws everything to the screen, called every second in update
     window.clear(sf::Color::White);
     window.draw(backgroundSprite);
     window.draw(player.getSprite());
+    window.draw(coin.getSprite());
 
     for (unsigned i = 0; i < level.platforms.size(); i++) {
         window.draw(level.platforms[i]);
