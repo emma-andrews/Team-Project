@@ -25,7 +25,9 @@ private:
 
 public:
     Player();
+    void setSprite(sf::IntRect aniRect);
     sf::Sprite getSprite();
+    void setPosition();
     void moveLeft();
     void moveRight();
     void stopLeft();

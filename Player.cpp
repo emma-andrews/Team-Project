@@ -8,7 +8,7 @@ sf::IntRect textRect(0, 0, 30, 40);
 Player::Player() {
     pSpeed = 400;
 
-    pTexture.loadFromFile("player character sheet.png");//need to update sheet real bad
+    pTexture.loadFromFile("player character sheet.png");
     pSprite.setTexture(pTexture);
     pSprite.setTextureRect(textRect);
     pSprite.setScale(2,2);//64 by 64
@@ -16,8 +16,18 @@ Player::Player() {
     pPosition.y = 800;
 }
 
+void Player::setSprite(sf::IntRect aniRect) {
+    pSprite.setTextureRect(aniRect);
+}
+
 sf::Sprite Player::getSprite() {
     return pSprite;
+}
+
+void Player::setPosition() {
+    pPosition.x = 500;
+    pPosition.y = 800;
+    pSprite.setPosition(pPosition);
 }
 
 void Player::moveLeft() {
@@ -65,12 +75,12 @@ void Player::update(float elapsedTime, float aniElapsed, int collision, std::vec
             pPosition.x = sf::VideoMode::getDesktopMode().width - 74;
         //animation.playerRun();
         //if (elapsedTime > 0.5f) {
-        textRect.top = 40;
-        if(textRect.left >= 180)
-            textRect.left = 30;
-        else
-            textRect.left += 30;
-        pSprite.setTextureRect(textRect);
+//        textRect.top = 40;
+//        if(textRect.left >= 180)
+//            textRect.left = 30;
+//        else
+//            textRect.left += 30;
+//        pSprite.setTextureRect(textRect);
         //}
     }
     if (pLeftPressed) {
@@ -113,6 +123,8 @@ void Player::update(float elapsedTime, float aniElapsed, int collision, std::vec
         pVelocity.y = 0;
         canJump = true;
     }
-
+    if (!pLeftPressed && !pRightPressed && !pJump && !canJump) {
+        //pSprite.setTextureRect();
+    }
     pSprite.setPosition(pPosition);
 }

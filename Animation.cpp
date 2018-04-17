@@ -3,11 +3,24 @@
 #include "Animation.h"
 
 Animation::Animation() {
-    runTexture.loadFromFile("player character run sheet.png");
+    runTexture.loadFromFile("player character sheet.png");
 }
 
-std::vector<sf::Texture> Animation::playerRun() {
-    std::vector<sf::Texture> vect;
-    sf::IntRect runSource(0, 0, 30, 40);
+std::vector<sf::IntRect> Animation::playerIdle() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect idleSource(0, 0, 30, 40);
+    while (idleSource.left <= 120) {
+        vect.push_back(idleSource);
+        idleSource.left += 30;
+    }
+}
+
+std::vector<sf::IntRect> Animation::playerRun() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect runSource(0, 40, 30, 40);
+    while (runSource.left <= 180) {
+        vect.push_back(runSource);
+        runSource.left += 30;
+    }
     return vect;
 }

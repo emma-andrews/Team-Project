@@ -9,7 +9,8 @@ private:
 
 public:
     Animation();
-    std::vector<sf::Texture> playerRun();
+    std::vector<sf::IntRect> playerIdle();
+    std::vector<sf::IntRect> playerRun();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H

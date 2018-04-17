@@ -77,7 +77,7 @@ void Engine::start() {//starts the game
 
 void Engine::nextLevel() {
     //set up for next level with message saying level complete, etc.
-
+    player.setPosition();
     start();
 }
 bool open = true;
