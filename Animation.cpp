@@ -8,7 +8,7 @@ Animation::Animation() {
 
 void Animation::playerRun(float elapsedTime, sf::Sprite player) {
     sf::IntRect runSource(0, 0, 30, 40);
-    if (elapsedTime > 1.0f) {
+    if (elapsedTime > 1.0f) {//creating animation
         if (runSource.left == 120) {
             runSource.left = 0;
         }
