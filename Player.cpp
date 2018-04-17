@@ -3,8 +3,7 @@
 #include "Levels.h"
 #include <vector>
 const float maxY = 2.5f;
-const sf::Vector2f gravity(0.f, 5.f);
-sf::Vector2f velocity(2.f, 5.f);
+const float gravity = 30.0f;
 Player::Player() {
     pSpeed = 400;
     pTexture.loadFromFile("32 x 32 platform character_idle_0.png");
@@ -36,13 +35,27 @@ void Player::stopRight() {
 
 void Player::jump() {
     pJump = true;
+    if(canJump) {
+        pVelocity.y = -12.0f;
+        canJump = false;
+    }
 }
 
 void Player::stopJump() {
     pJump = false;
+    if (pVelocity.y < -6.0f) {
+        pVelocity.y = -6.0f;
+    }
 }
 
 void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats) {
+    pPosition.x += pVelocity.x * elapsedTime;
+    pPosition.y += pVelocity.y * gravity * elapsedTime * 3;
+    pVelocity.y += gravity * elapsedTime;
+    if (pPosition.y > 920) {
+        pPosition.y = 920;
+        canJump = true;
+    }
     if (pRightPressed) {
         pPosition.x += pSpeed * elapsedTime;
         if (pPosition.x >= sf::VideoMode::getDesktopMode().width - 64)
@@ -54,7 +67,7 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         if (pPosition.x <= 0)
             pPosition.x = 10;
     }
-    if (pJump) {
+    if (pJump && canJump) {
         if (pPosition.y > 0) {
             pPosition.y -= maxY;
         }

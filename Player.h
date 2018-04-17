@@ -17,6 +17,7 @@ private:
     bool pLeftPressed;
     bool pRightPressed;
     bool pJump;
+    bool canJump;
 
     float pSpeed;
     int lives = 3;

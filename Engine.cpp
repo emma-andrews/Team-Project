@@ -79,37 +79,36 @@ void Engine::nextLevel() {
 }
 bool open = true;
 void Engine::input() {//calculates user inputs and what actions are performed based on input
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        //window.close();
-        open = false;
-    }
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            //window.close();
+            open = false;
+        }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        player.moveLeft();//moves left when A is pressed
-    }
-    else {
-        player.stopLeft();//does not move left when anything other than A is pressed
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        player.moveRight();//moves right when D is pressed
-    }
-    else {
-        player.stopRight();//does not move right when anything other than D is pressed
-    }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+            player.moveLeft();//moves left when A is pressed
+        } else {
+            player.stopLeft();//does not move left when anything other than A is pressed
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+            player.moveRight();//moves right when D is pressed
+        } else {
+            player.stopRight();//does not move right when anything other than D is pressed
+        }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        player.jump();
-    }
-    else {
-        player.stopJump();
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && !open) {
-        window.close();
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && !open) {
-        open = true;
-        window.clear();
-        draw();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            player.jump();
+        } else {
+            player.stopJump();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && !open) {
+            window.close();
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && !open) {
+            open = true;
+            window.clear();
+            draw();
+        }
     }
 }
 
