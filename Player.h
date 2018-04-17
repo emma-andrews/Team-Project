@@ -18,6 +18,7 @@ private:
     bool pRightPressed;
     bool pJump;
     bool canJump;
+    bool platJump;
 
     float pSpeed;
     int lives = 3;
@@ -31,7 +32,7 @@ public:
     void stopRight();
     void jump();
     void stopJump();
-    void update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats);
+    void update(float elapsedTime, float aniElapsed, int collision, std::vector<sf::RectangleShape> plats);
 };
 
 #endif //TEAMPROJECT_PLAYER_H

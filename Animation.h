@@ -1,6 +1,7 @@
 #ifndef TEAMPROJECT_ANIMATION_H
 #define TEAMPROJECT_ANIMATION_H
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 class Animation {
 private:
@@ -8,7 +9,7 @@ private:
 
 public:
     Animation();
-    void playerRun(float elapsedTime, sf::Sprite player);
+    std::vector<sf::Texture> playerRun();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H

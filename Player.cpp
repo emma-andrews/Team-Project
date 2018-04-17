@@ -4,13 +4,16 @@
 #include <vector>
 const float maxY = 2.5f;
 const float gravity = 30.0f;
+sf::IntRect textRect(0, 0, 30, 40);
 Player::Player() {
     pSpeed = 400;
-    pTexture.loadFromFile("32 x 32 platform character_idle_0.png");
+
+    pTexture.loadFromFile("player character sheet.png");//need to update sheet real bad
     pSprite.setTexture(pTexture);
+    pSprite.setTextureRect(textRect);
     pSprite.setScale(2,2);//64 by 64
     pPosition.x = 500;
-    pPosition.y = 500;
+    pPosition.y = 800;
 }
 
 sf::Sprite Player::getSprite() {
@@ -48,7 +51,7 @@ void Player::stopJump() {
     }
 }
 
-void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats) {
+void Player::update(float elapsedTime, float aniElapsed, int collision, std::vector<sf::RectangleShape> plats) {
     pPosition.x += pVelocity.x * elapsedTime;
     pPosition.y += pVelocity.y * gravity * elapsedTime * 3;
     pVelocity.y += gravity * elapsedTime;
@@ -60,7 +63,15 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         pPosition.x += pSpeed * elapsedTime;
         if (pPosition.x >= sf::VideoMode::getDesktopMode().width - 64)
             pPosition.x = sf::VideoMode::getDesktopMode().width - 74;
-        animation.playerRun(elapsedTime, getSprite());
+        //animation.playerRun();
+        //if (elapsedTime > 0.5f) {
+        textRect.top = 40;
+        if(textRect.left >= 180)
+            textRect.left = 30;
+        else
+            textRect.left += 30;
+        pSprite.setTextureRect(textRect);
+        //}
     }
     if (pLeftPressed) {
         pPosition.x -= pSpeed * elapsedTime;
@@ -76,7 +87,31 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         }
     }
     if (collision >= 0) {
-        pPosition.y = (plats[collision].getGlobalBounds().top - plats[collision].getGlobalBounds().height);
+        if (pPosition.x <= plats[collision].getPosition().x && pPosition.y >= plats[collision].getPosition().y) {
+            pPosition.x = plats[collision].getPosition().x - 64;
+            pPosition.y = plats[collision].getPosition().y + 64;
+        }
+        else if (pPosition.x <= plats[collision].getPosition().x && pPosition.y <= plats[collision].getPosition().y - plats[collision].getGlobalBounds().height) {
+            pPosition.x = plats[collision].getPosition().x - 64;
+            pPosition.y = plats[collision].getPosition().y - plats[collision].getGlobalBounds().height - 64;
+        }
+        else if (pPosition.x >= plats[collision].getPosition().x + plats[collision].getGlobalBounds().width && pPosition.y >= plats[collision].getPosition().y) {
+            pPosition.x = plats[collision].getPosition().x + plats[collision].getGlobalBounds().width + 64;
+            pPosition.y = plats[collision].getPosition().y + 64;
+        }
+        else if (pPosition.x >= plats[collision].getPosition().x + plats[collision].getGlobalBounds().width && pPosition.y <= plats[collision].getPosition().y - plats[collision].getGlobalBounds().height) {
+            pPosition.x = plats[collision].getPosition().x + plats[collision].getGlobalBounds().width + 64;
+            pPosition.y = plats[collision].getPosition().y - plats[collision].getGlobalBounds().height - 64;
+        }
+//        else if (pPosition.y >= plats[collision].getPosition().y) {
+//            pPosition.y = plats[collision].getPosition().y + 64;
+//        }
+//        else if (pPosition.y <= plats[collision].getPosition().y - plats[collision].getGlobalBounds().height) {
+//            pPosition.y = plats[collision].getPosition().y - plats[collision].getGlobalBounds().height - 64;
+//        }
+
+        pVelocity.y = 0;
+        canJump = true;
     }
 
     pSprite.setPosition(pPosition);

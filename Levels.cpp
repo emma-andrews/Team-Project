@@ -32,7 +32,7 @@ Levels::Levels() {
     finishPlat.setSize(fPosition);
     ceiling.setSize(cPosition);
 
-    tposition.y = 900;
+    tposition.y = 850;
     fPosition.x = 1700;
     fPosition.y = 200;
     gPosition.x = 0;

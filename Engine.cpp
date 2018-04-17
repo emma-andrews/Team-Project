@@ -7,7 +7,7 @@ Engine::Engine() {
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
     resolution.y = sf::VideoMode::getDesktopMode().height;
 
-    window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Fullscreen);
+    window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Resize);
     //creates the window
     backgroundTexture.loadFromFile("cyberpunk-street.png");//608 by 192
     backgroundSprite.setTexture(backgroundTexture);
@@ -51,7 +51,7 @@ Engine::Engine() {
     timeRect.setPosition((resolution.x / 2) - (timePosition.x / 2), 980);
 
     closeText.setFont(font);
-    closeText.setString("Do you want to exit the game?\nYES: Y\tNO: N");
+    closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
     closeText.setCharacterSize(40);
     closeText.setPosition(560, 540);
     closeText.setFillColor(sf::Color::White);
@@ -59,15 +59,18 @@ Engine::Engine() {
 
 void Engine::start() {//starts the game
     sf::Clock clock;
+    sf::Clock aniClock;
     levelFinished = false;
     level.generatePlat();
     gameTime = clock.restart();
     while (window.isOpen()) {//updates the game every second
         sf::Time dt = clock.restart();
+        sf::Time da = aniClock.restart();
         float dtAsSeconds = dt.asSeconds();
+        float daAsSeconds = da.asSeconds();
         lGameTime = gameTime.asSeconds();
         input();
-        update(dtAsSeconds);
+        update(dtAsSeconds, daAsSeconds);
         draw();
     }
 }
@@ -112,9 +115,9 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
     }
 }
 
-void Engine::update(float dtAsSeconds) {
+void Engine::update(float dtAsSeconds, float daAsSeconds) {
     int col = level.checkCollision(player.getSprite());
-    player.update(dtAsSeconds, col, level.platforms);
+    player.update(dtAsSeconds, daAsSeconds, col, level.platforms);
     levelFinished = level.checkFinished(player.getSprite());
 }
 

@@ -28,7 +28,7 @@ private:
     bool levelFinished;
     float lGameTime;
     void input();
-    void update(float dtAsSeconds);
+    void update(float dtAsSeconds, float daAsSeconds);
     void draw();
     void nextLevel();
 
