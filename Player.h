@@ -27,10 +27,10 @@ public:
     sf::Sprite getSprite();
     void moveLeft();
     void moveRight();
-    void jump();
-    void stopJump();
     void stopLeft();
     void stopRight();
+    void jump();
+    void stopJump();
     void update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats);
 };
 
