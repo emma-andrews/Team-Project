@@ -26,7 +26,6 @@ Engine::Engine() {
     closeText.setFont(font);
     stuckText.setFont(font);
 
-    livesText.setString("Lives Remaining: 3");//need to update when player is hit by an enemy
     scoreText.setString("Score: 0");
     finishText.setString("Level Complete!");
     endplatText.setString("FINISH");
@@ -65,6 +64,7 @@ void Engine::start() {//starts the game
     sf::Clock clock;
     sf::Clock gameClock;
     levelFinished = false;//the level is not finished since it just started
+    chestOpen = false;
     level.generatePlat();//generates the random platforms of the level
     chest.setPosition(level.platforms[7].getPosition());
     sf::Time gameTime = gameClock.restart();
@@ -140,16 +140,28 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
         }
     }
 }
-
+bool alreadyOpen = false;
 void Engine::update(float dtAsSeconds, float totalTime) {
     int col = level.checkCollision(player.getSprite());
     player.update(dtAsSeconds, col, level.platforms);
     levelFinished = level.checkFinished(player.getSprite());
+    if (!alreadyOpen) {
+        chestOpen = player.checkInteraction(chest.getChestSprite());
+    }
+    if (chestOpen) {
+        chest.playAnimation();
+        alreadyOpen = true;
+    }
     coin.update();
     chest.update();
     std::ostringstream s2;
     s2 << "Time: " << totalTime;
     timeText.setString(s2.str());
+
+    playerLives = player.getLives();
+    std::ostringstream s3;
+    s3 << "Lives: " << playerLives;
+    livesText.setString(s3.str());
 }
 
 void Engine::draw() {//draws everything to the screen, called every frame in update

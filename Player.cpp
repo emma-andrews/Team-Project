@@ -183,3 +183,30 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
     }
     pSprite.setPosition(pPosition);
 }
+
+void Player::setLives(int num) {
+    lives = num;
+}
+
+int Player::getLives() {
+    return lives;
+}
+
+bool Player::checkInteraction(sf::Sprite chest) {
+    if (pSprite.getGlobalBounds().intersects(chest.getGlobalBounds())) {
+        //drop chance for either score increase or extra life
+        int chance = rand() % 2 + 1;
+        std::cout << chance;
+        if (chance == 1) {
+            //increase life count
+            lives++;
+        }
+        else if (chance == 2) {
+            //increase score by some amount
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}

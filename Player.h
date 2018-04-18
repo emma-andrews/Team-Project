@@ -45,6 +45,9 @@ public:
     void jump();
     void stopJump();
     void update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats);
+    void setLives(int num);
+    int getLives();
+    bool checkInteraction(sf::Sprite chest);
 };
 
 #endif //TEAMPROJECT_PLAYER_H

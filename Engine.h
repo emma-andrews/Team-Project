@@ -30,6 +30,8 @@ private:
     Chest chest;
 
     bool levelFinished;
+    bool chestOpen;
+    int playerLives;
     float lGameTime;
     void input();
     void update(float dtAsSeconds, float totalTime);

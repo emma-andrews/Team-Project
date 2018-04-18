@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <ctime>
 #include "Chest.h"
 
 Chest::Chest() {
+    srand(time(nullptr));
     cTexture.loadFromFile("chest sheet.png");
     cSprite.setTexture(cTexture);
     cSprite.setScale(2,2);
@@ -20,8 +23,12 @@ void Chest::setPosition(sf::Vector2f platPosition) {
 }
 
 void Chest::update() {
+    cSprite.setPosition(cPosition);
+}
+
+void Chest::playAnimation() {
     bool lastFrame = false;
-    if (cClock.getElapsedTime().asSeconds() > 1.0f) {
+    if (cClock.getElapsedTime().asSeconds() > 0.2f) {
         chestAni = animation.chestOpen();
         cSprite.setTextureRect(chestAni[cFrame]);
         if (cFrame == chestAni.size() - 1) {
@@ -35,5 +42,4 @@ void Chest::update() {
         }
         cClock.restart();
     }
-    cSprite.setPosition(cPosition);
 }

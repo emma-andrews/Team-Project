@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Animation.h"
+#include "Player.h"
 
 class Chest {
 private:
@@ -22,6 +23,7 @@ public:
     sf::Sprite getChestSprite();
     void setPosition(sf::Vector2f platPosition);
     void update();
+    void playAnimation();
 };
 
 #endif //TEAMPROJECT_CHEST_H
