@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Levels.h"
 #include "Coin.h"
+#include "Chest.h"
 
 class Engine {
 private:
@@ -26,6 +27,7 @@ private:
     Player player;
     Levels level;
     Coin coin;
+    Chest chest;
 
     bool levelFinished;
     float lGameTime;

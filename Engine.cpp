@@ -151,6 +151,7 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
     window.draw(backgroundSprite);//draws the background
     window.draw(player.getSprite());//the player sprite
     window.draw(coin.getSprite());//the coin sprite
+    window.draw(chest.getChestSprite());
 
     for (unsigned i = 0; i < level.platforms.size(); i++) {
         window.draw(level.platforms[i]);//each individual platform that was generated

@@ -70,3 +70,13 @@ std::vector<sf::IntRect> Animation::coinTurn() {
     }
     return vect;
 }
+
+std::vector<sf::IntRect> Animation::chestOpen() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect openSource(0, 0, 16, 16);
+    while (openSource.left <= 48) {
+        vect.push_back(openSource);
+        openSource.left += 16;
+    }
+    return vect;
+}

@@ -15,6 +15,7 @@ public:
     std::vector<sf::IntRect> playerLRun();
     std::vector<sf::IntRect> playerRJump();
     std::vector<sf::IntRect> coinTurn();
+    std::vector<sf::IntRect> chestOpen();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H
