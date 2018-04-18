@@ -12,13 +12,16 @@ private:
     sf::Vector2f tposition;
     sf::Vector2f gPosition;
     sf::Vector2f fPosition;
+    sf::Vector2f tempPosition;
 
     sf::RectangleShape plat1;
     sf::RectangleShape ground;
     sf::RectangleShape finishPlat;
 
+    bool validPosition;
+
 public:
-    int levelNum = 1;
+    int levelNum;
     std::vector<sf::RectangleShape> platforms;
 
     Levels();

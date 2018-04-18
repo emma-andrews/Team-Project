@@ -4,9 +4,15 @@
 #include "Levels.h"
 
 Levels::Levels() {
+    levelNum = 0;
     srand(time(nullptr));
     sf::Vector2f cPosition;
     sf::RectangleShape ceiling;
+    sf::RectangleShape staticStair;
+    sf::Vector2f ssPosition;
+
+    ssPosition.x = 100;
+    ssPosition.y = 25;
 
     cPosition.x = 1920;
     cPosition.y = 10;
@@ -26,12 +32,16 @@ Levels::Levels() {
     ground.setFillColor(sf::Color::Magenta);//change to transparent later, set as this just to see where it is when testing
     finishPlat.setFillColor(sf::Color(107, 19, 66));
     ceiling.setFillColor(sf::Color::Magenta);
+    staticStair.setFillColor(sf::Color(107, 19, 66));
 
     plat1.setSize(tposition);
     ground.setSize(gPosition);
     finishPlat.setSize(fPosition);
     ceiling.setSize(cPosition);
+    staticStair.setSize(ssPosition);
 
+    ssPosition.x = 270;
+    ssPosition.y = 700;
     tposition.y = 850;
     fPosition.x = 1700;
     fPosition.y = 200;
@@ -43,10 +53,12 @@ Levels::Levels() {
     ground.setPosition(gPosition);
     ceiling.setPosition(cPosition);
     finishPlat.setPosition(fPosition);
+    staticStair.setPosition(ssPosition);
 
     platforms.push_back(ground);
     //platforms.push_back(ceiling);
     platforms.push_back(finishPlat);
+    platforms.push_back(staticStair);
 }
 
 int Levels::checkCollision(sf::Sprite player) {
@@ -84,16 +96,29 @@ bool Levels::checkFinished(sf::Sprite player) {
 }
 
 void Levels::generatePlat() {
-    for (int i = 0; i < 17; i++) {
-        plat1.setPosition(tposition);
-        platforms.push_back(plat1);
-
-        tposition.x += rand() % 100 + 100;//will have to check if its possible to reach some of these offsets once jumping is implemented
-        if (tposition.x > 1800)
-            tposition.x = rand() % 100 + 1;
-
-        tposition.y = rand() % 1000 - 300;
-        if (tposition.y < 50)
-            tposition.y = rand() % 700 + 100;
+    bool secondloop = false;
+    int x = 0;
+    sf::Vector2f size;
+    size.x = 100;
+    size.y = 25;
+    for (int i = 0; i < 20; i++) {
+        sf::RectangleShape plat;
+        plat.setSize(size);
+        plat.setFillColor(sf::Color(107, 19, 66));
+        sf::Vector2f position;
+        if (!secondloop) {
+            x += 125;
+        }
+        else if (secondloop) {
+            x += 175;
+        }
+        if (x >= 1750) {
+            x = 125;
+            secondloop = true;
+        }
+        position.y = rand() % 800 + 140;
+        position.x = x;
+        plat.setPosition(position);
+        platforms.push_back(plat);
     }
 }
