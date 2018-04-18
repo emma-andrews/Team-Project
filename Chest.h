@@ -12,13 +12,16 @@ private:
     sf::Vector2f cPosition;
     sf::Clock cClock;
     std::vector<sf::IntRect> chestAni;
+    sf::IntRect cRect;
 
     Animation animation;
+    int cFrame;
 
 public:
     Chest();
     sf::Sprite getChestSprite();
     void setPosition(sf::Vector2f platPosition);
+    void update();
 };
 
 #endif //TEAMPROJECT_CHEST_H

@@ -66,6 +66,7 @@ void Engine::start() {//starts the game
     sf::Clock gameClock;
     levelFinished = false;//the level is not finished since it just started
     level.generatePlat();//generates the random platforms of the level
+    chest.setPosition(level.platforms[7].getPosition());
     sf::Time gameTime = gameClock.restart();
     level.levelNum++;
     std::ostringstream s;
@@ -101,23 +102,27 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             player.moveLeft();//moves left when A is pressed
-        } else {
+        }
+        else {
             player.stopLeft();//does not move left when anything other than A is pressed
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             player.moveRight();//moves right when D is pressed
-        } else {
+        }
+        else {
             player.stopRight();//does not move right when anything other than D is pressed
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             player.jump();
-        } else {
+        }
+        else {
             player.stopJump();
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && !open) {
             window.close();
-        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && !open) {
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && !open) {
             open = true;
             window.clear();
             draw();
@@ -141,6 +146,7 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     player.update(dtAsSeconds, col, level.platforms);
     levelFinished = level.checkFinished(player.getSprite());
     coin.update();
+    chest.update();
     std::ostringstream s2;
     s2 << "Time: " << totalTime;
     timeText.setString(s2.str());

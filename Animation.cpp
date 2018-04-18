@@ -76,7 +76,7 @@ std::vector<sf::IntRect> Animation::chestOpen() {//animation for chest opening
     sf::IntRect openSource(0, 0, 16, 16);
     while (openSource.left <= 48) {
         vect.push_back(openSource);
-        openSource.left += 16;
+        openSource.left += 17;
     }
     return vect;
 }

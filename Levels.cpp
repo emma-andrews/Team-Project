@@ -101,7 +101,7 @@ void Levels::generatePlat() {
     sf::Vector2f size;
     size.x = 100;
     size.y = 25;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 18; i++) {
         sf::RectangleShape plat;
         plat.setSize(size);
         plat.setFillColor(sf::Color(107, 19, 66));
@@ -110,7 +110,7 @@ void Levels::generatePlat() {
             x += 125;
         }
         else if (secondloop) {
-            x += 175;
+            x += 160;
         }
         if (x >= 1750) {
             x = 125;
