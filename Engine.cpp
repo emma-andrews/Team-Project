@@ -7,7 +7,7 @@ Engine::Engine() {
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
     resolution.y = sf::VideoMode::getDesktopMode().height;
 
-    window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Resize);
+    window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Resize);//creates render window which the game will be displayed on
     //creates the window
     backgroundTexture.loadFromFile("cyberpunk-street.png");//608 by 192
     backgroundSprite.setTexture(backgroundTexture);
@@ -16,37 +16,42 @@ Engine::Engine() {
     float yScale = resolution.y / 192;
     backgroundSprite.setScale(xScale, yScale);//sets scale of background image
 
-    font.loadFromFile("VCR_OSD_MONO_1.001.ttf");//will need to create a font folder in project so non-windows users can see it
+    font.loadFromFile("VCR_OSD_MONO_1.001.ttf");//sets all texts used on the screen to this font
     levelText.setFont(font);
     livesText.setFont(font);
     scoreText.setFont(font);
     finishText.setFont(font);
     endplatText.setFont(font);
     timeText.setFont(font);
+    closeText.setFont(font);
 
     levelText.setString("Level 1");//need to increase level count when they reach the next level
     livesText.setString("Lives Remaining: 3");//need to update when player is hit by an enemy
     scoreText.setString("Score: 0");
     finishText.setString("Level Complete!");
     endplatText.setString("FINISH");
+    closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
 
-    levelText.setCharacterSize(30);
+    levelText.setCharacterSize(30);//sets the size of the text
     livesText.setCharacterSize(30);
     scoreText.setCharacterSize(30);
     finishText.setCharacterSize(75);
     endplatText.setCharacterSize(25);
+    closeText.setCharacterSize(40);
 
-    levelText.setFillColor(sf::Color::White);
+    levelText.setFillColor(sf::Color::White);//sets the color of the text
     livesText.setFillColor(sf::Color::White);
     scoreText.setFillColor((sf::Color::White));
     finishText.setFillColor(sf::Color::White);
-    endplatText.setFillColor(sf::Color(255, 162, 40));
+    endplatText.setFillColor(sf::Color(255, 162, 40));//rgb is an orange color
+    closeText.setFillColor(sf::Color::White);
 
-    levelText.setPosition(20, 20);
+    levelText.setPosition(20, 20);//sets the text at a position on the screen
     livesText.setPosition(20, 50);
     scoreText.setPosition(20, 80);
     finishText.setPosition(900, 500);//temporary position, needs to be updated to be somewhat in the middle of the screen
     endplatText.setPosition(1705, 170);
+    closeText.setPosition(560, 540);
 
     sf::Vector2f timePosition;
     timePosition.x = 400;
@@ -54,27 +59,21 @@ Engine::Engine() {
     timeRect.setSize(timePosition);
     timeRect.setFillColor(sf::Color::Yellow);
     timeRect.setPosition((resolution.x / 2) - (timePosition.x / 2), 980);
-
-    closeText.setFont(font);
-    closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
-    closeText.setCharacterSize(40);
-    closeText.setPosition(560, 540);
-    closeText.setFillColor(sf::Color::White);
 }
 
 void Engine::start() {//starts the game
     sf::Clock clock;
-    levelFinished = false;
-    level.generatePlat();
+    levelFinished = false;//the level is not finished since it just started
+    level.generatePlat();//generates the random platforms of the level
     gameTime = clock.restart();
 
-    while (window.isOpen()) {//updates the game every second
+    while (window.isOpen()) {//updates the game every frame
         sf::Time dt = clock.restart();
-        float dtAsSeconds = dt.asSeconds();
+        float dtAsSeconds = dt.asSeconds();//gets the elapsed time
         lGameTime = gameTime.asSeconds();
-        input();
-        update(dtAsSeconds);
-        draw();
+        input();//receives input from user during this frame
+        update(dtAsSeconds);//calls for updates based on elapsed time and user input
+        draw();//draws all sprites, texts, and shapes to the render window
     }
 }
 
@@ -125,29 +124,30 @@ void Engine::update(float dtAsSeconds) {
     coin.update();
 }
 
-void Engine::draw() {//draws everything to the screen, called every second in update
-    window.clear(sf::Color::White);
-    window.draw(backgroundSprite);
-    window.draw(player.getSprite());
-    window.draw(coin.getSprite());
+void Engine::draw() {//draws everything to the screen, called every frame in update
+    window.clear(sf::Color::White);//clears the window if anything is on it
+    window.draw(backgroundSprite);//draws the background
+    window.draw(player.getSprite());//the player sprite
+    window.draw(coin.getSprite());//the coin sprite
 
     for (unsigned i = 0; i < level.platforms.size(); i++) {
-        window.draw(level.platforms[i]);
+        window.draw(level.platforms[i]);//each individual platform that was generated
     }
 
-    window.draw(levelText);
+    window.draw(levelText);//draws all the texts
     window.draw(livesText);
     window.draw(scoreText);
     window.draw(endplatText);
 
-    if(!open){
+    if(!open){//if the user enters esc to exit the game
         window.draw(closeText);
     }
-    window.display();
+    window.display();//displays everything that was drawn to the screen
 
     if (levelFinished) {
         window.draw(finishText);
         //create a pause so that text is displayed and not immediately cleared
+        window.display();
         window.clear();
         level.popPlat();
         nextLevel();

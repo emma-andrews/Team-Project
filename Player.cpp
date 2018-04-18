@@ -8,18 +8,19 @@ const float maxY = 2.5f;
 const float gravity = 30.0f;
 sf::IntRect textRect(0, 0, 30, 40);
 Player::Player() {
-    pSpeed = 400;
-    rFrame = 0;
+    pSpeed = 400;//speed of the player
+    rFrame = 0;//initializes the frame counts for the animations to 0
     lFrame = 0;
-    iFrame = 0;
+    irFrame = 0;
+    ilFrame = 0;
     jFrame = 0;
-    lives = 3;
+    lives = 3;//start with 3 lives
 
     pTexture.loadFromFile("player character sheet.png");
-    pSprite.setTexture(pTexture);
-    pSprite.setTextureRect(textRect);
-    pSprite.setScale(2,2);//64 by 64
-    pPosition.x = 500;
+    pSprite.setTexture(pTexture);//sets the texture of the player to be the sheet of all frames of the player
+    pSprite.setTextureRect(textRect);//sets the current texture of the sprite to the rectangle starting at position 0,0 and extending to 30 by 40
+    pSprite.setScale(2,2);//scales sprite by 2 so it is 64 by 64
+    pPosition.x = 500;//initial starting position
     pPosition.y = 800;
 }
 
@@ -28,43 +29,43 @@ Player::Player() {
 //}
 
 sf::Sprite Player::getSprite() {
-    return pSprite;
+    return pSprite;//get the sprite of the player
 }
 
 void Player::setPosition() {
-    pPosition.x = 500;
+    pPosition.x = 500;//sets the position of the player back to the initial starting point
     pPosition.y = 800;
     pSprite.setPosition(pPosition);
 }
 
 void Player::moveLeft() {
-    pLeftPressed = true;
+    pLeftPressed = true;//able to move left
 }
 
 void Player::moveRight() {
-    pRightPressed = true;
+    pRightPressed = true;//able to move right
 }
 
 void Player::stopLeft() {
-    pLeftPressed = false;
+    pLeftPressed = false;//not able to move left
 }
 
 void Player::stopRight() {
-    pRightPressed = false;
+    pRightPressed = false;//not able to move right
 }
 
 void Player::jump() {
-    pJump = true;
-    if(canJump) {
+    pJump = true;//input to jump
+    if(canJump) {//able to jump based on current position
         pVelocity.y = -12.0f;
-        canJump = false;
+        canJump = false;//unable to jump while already in a jump
     }
 }
 
 void Player::stopJump() {
-    pJump = false;
+    pJump = false;//no input to jump
     if (pVelocity.y < -6.0f) {
-        pVelocity.y = -6.0f;
+        pVelocity.y = -6.0f;//no longer moving down
     }
 }
 
@@ -160,10 +161,10 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         if (rightLast) {
             if (aniClock.getElapsedTime().asSeconds() > 0.2f) {
                 aniRect = animation.playerRIdle();
-                pSprite.setTextureRect(aniRect[iFrame]);
-                iFrame++;
-                if (iFrame >= aniRect.size()) {
-                    iFrame = 0;
+                pSprite.setTextureRect(aniRect[irFrame]);
+                irFrame++;
+                if (irFrame >= aniRect.size()) {
+                    irFrame = 0;
                 }
                 aniClock.restart();
             }
@@ -171,10 +172,10 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         else if (leftLast) {
             if (aniClock.getElapsedTime().asSeconds() > 0.2f) {
                 aniRect = animation.playerLIdle();
-                pSprite.setTextureRect(aniRect[iFrame]);
-                iFrame++;
-                if (iFrame >= aniRect.size()) {
-                    iFrame = 0;
+                pSprite.setTextureRect(aniRect[ilFrame]);
+                ilFrame++;
+                if (ilFrame >= aniRect.size()) {
+                    ilFrame = 0;
                 }
                 aniClock.restart();
             }

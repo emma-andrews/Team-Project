@@ -27,7 +27,8 @@ private:
     int lives;
     int rFrame;
     int lFrame;
-    int iFrame;
+    int irFrame;
+    int ilFrame;
     int jFrame;
 
 public:
