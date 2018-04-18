@@ -71,7 +71,7 @@ std::vector<sf::IntRect> Animation::coinTurn() {
     return vect;
 }
 
-std::vector<sf::IntRect> Animation::chestOpen() {
+std::vector<sf::IntRect> Animation::chestOpen() {//animation for chest opening
     std::vector<sf::IntRect> vect;
     sf::IntRect openSource(0, 0, 16, 16);
     while (openSource.left <= 48) {
