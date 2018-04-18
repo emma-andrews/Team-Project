@@ -17,6 +17,7 @@ private:
 
     sf::Text levelText;
     sf::Text livesText;
+    sf::Text scoreText;
     sf::Text finishText;
     sf::Text endplatText;
     sf::Text timeText;

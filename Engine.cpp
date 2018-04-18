@@ -19,27 +19,32 @@ Engine::Engine() {
     font.loadFromFile("VCR_OSD_MONO_1.001.ttf");//will need to create a font folder in project so non-windows users can see it
     levelText.setFont(font);
     livesText.setFont(font);
+    scoreText.setFont(font);
     finishText.setFont(font);
     endplatText.setFont(font);
     timeText.setFont(font);
 
     levelText.setString("Level 1");//need to increase level count when they reach the next level
     livesText.setString("Lives Remaining: 3");//need to update when player is hit by an enemy
+    scoreText.setString("Score: 0");
     finishText.setString("Level Complete!");
     endplatText.setString("FINISH");
 
     levelText.setCharacterSize(30);
     livesText.setCharacterSize(30);
+    scoreText.setCharacterSize(30);
     finishText.setCharacterSize(75);
     endplatText.setCharacterSize(25);
 
     levelText.setFillColor(sf::Color::White);
     livesText.setFillColor(sf::Color::White);
+    scoreText.setFillColor((sf::Color::White));
     finishText.setFillColor(sf::Color::White);
     endplatText.setFillColor(sf::Color(255, 162, 40));
 
     levelText.setPosition(20, 20);
     livesText.setPosition(20, 50);
+    scoreText.setPosition(20, 80);
     finishText.setPosition(900, 500);//temporary position, needs to be updated to be somewhat in the middle of the screen
     endplatText.setPosition(1705, 170);
 
@@ -132,6 +137,7 @@ void Engine::draw() {//draws everything to the screen, called every second in up
 
     window.draw(levelText);
     window.draw(livesText);
+    window.draw(scoreText);
     window.draw(endplatText);
 
     if(!open){

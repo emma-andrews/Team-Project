@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Levels.h"
 #include <vector>
+#include <iostream>
+
 const float maxY = 2.5f;
 const float gravity = 30.0f;
 sf::IntRect textRect(0, 0, 30, 40);
@@ -113,31 +115,18 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         }
     }
     if (collision >= 0) {
-        if (pPosition.x <= plats[collision].getPosition().x && pPosition.y >= plats[collision].getPosition().y) {
-            pPosition.x = plats[collision].getPosition().x - 64;
-            pPosition.y = plats[collision].getPosition().y + 64;
+        if (pPosition.y > plats[collision].getGlobalBounds().top) {
+            //pPosition.y = plats[collision].getGlobalBounds().top + pSprite.getGlobalBounds().height;
+            pVelocity.y = 3.0f;
         }
-        else if (pPosition.x <= plats[collision].getPosition().x && pPosition.y <= plats[collision].getPosition().y - plats[collision].getGlobalBounds().height) {
-            pPosition.x = plats[collision].getPosition().x - 64;
-            pPosition.y = plats[collision].getPosition().y - plats[collision].getGlobalBounds().height - 64;
+        else {
+            pPosition.y =  plats[collision].getGlobalBounds().top - pSprite.getGlobalBounds().height;
+            pVelocity.y = 0;
+            canJump = true;
         }
-        else if (pPosition.x >= plats[collision].getPosition().x + plats[collision].getGlobalBounds().width && pPosition.y >= plats[collision].getPosition().y) {
-            pPosition.x = plats[collision].getPosition().x + plats[collision].getGlobalBounds().width + 64;
-            pPosition.y = plats[collision].getPosition().y + 64;
-        }
-        else if (pPosition.x >= plats[collision].getPosition().x + plats[collision].getGlobalBounds().width && pPosition.y <= plats[collision].getPosition().y - plats[collision].getGlobalBounds().height) {
-            pPosition.x = plats[collision].getPosition().x + plats[collision].getGlobalBounds().width + 64;
-            pPosition.y = plats[collision].getPosition().y - plats[collision].getGlobalBounds().height - 64;
-        }
-//        else if (pPosition.y >= plats[collision].getPosition().y) {
-//            pPosition.y = plats[collision].getPosition().y + 64;
-//        }
-//        else if (pPosition.y <= plats[collision].getPosition().y - plats[collision].getGlobalBounds().height) {
-//            pPosition.y = plats[collision].getPosition().y - plats[collision].getGlobalBounds().height - 64;
-//        }
 
-        pVelocity.y = 0;
-        canJump = true;
+
+
     }
     if (!pLeftPressed && !pRightPressed && !pJump && !canJump) {
         //pSprite.setTextureRect();
