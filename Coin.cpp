@@ -1,17 +1,32 @@
 #include <iostream>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Coin.h"
+#include <vector>
+
 Coin::Coin() {
-    coinTexture.loadFromFile("jewel_Animation 1_3.png");
+    coinTexture.loadFromFile("jewel sheet.png");
     coinSprite.setTexture(coinTexture);
+    sf::IntRect tempcoinrect(0,0,16,16);
+    coinSprite.setTextureRect(tempcoinrect);
     coinSprite.setScale(2,2);
     coinPosition.x = 500;
     coinPosition.y = 950;
+
+    cFrame = 0;
 }
 sf::Sprite Coin::getSprite() {
     return coinSprite;
 }
 void Coin::update() {
+    if (coinClock.getElapsedTime().asSeconds() > 0.15f) {
+        coinRect = animation.coinTurn();
+        coinSprite.setTextureRect(coinRect[cFrame]);
+        cFrame++;
+        if (cFrame >= coinRect.size()) {
+            cFrame = 0;
+        }
+        coinClock.restart();
+    }
     coinSprite.setPosition(coinPosition);
 }
 //    Coin(sf::Vector2f size) {

@@ -9,8 +9,12 @@ private:
 
 public:
     Animation();
-    std::vector<sf::IntRect> playerIdle();
-    std::vector<sf::IntRect> playerRun();
+    std::vector<sf::IntRect> playerRIdle();
+    std::vector<sf::IntRect> playerLIdle();
+    std::vector<sf::IntRect> playerRRun();
+    std::vector<sf::IntRect> playerLRun();
+    std::vector<sf::IntRect> playerRJump();
+    std::vector<sf::IntRect> coinTurn();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H

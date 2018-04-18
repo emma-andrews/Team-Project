@@ -10,6 +10,11 @@ private:
     sf::Vector2f coinPosition;
     sf::Sprite coinSprite;
     sf::Texture coinTexture;
+    sf::Clock coinClock;
+    std::vector<sf::IntRect> coinRect;
+
+    Animation animation;
+    int cFrame;
 public:
     Coin();
     sf::Sprite getSprite();

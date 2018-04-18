@@ -20,12 +20,15 @@ private:
     bool pJump;
     bool canJump;
     bool platJump;
+    bool rightLast;
+    bool leftLast;
 
     float pSpeed;
     int lives;
     int rFrame;
     int lFrame;
     int iFrame;
+    int jFrame;
 
 public:
     sf::Clock aniClock;
