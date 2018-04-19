@@ -75,8 +75,8 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
     pPosition.x += pVelocity.x * elapsedTime;
     pPosition.y += pVelocity.y * gravity * elapsedTime * 3;
     pVelocity.y += gravity * elapsedTime;
-    if (pPosition.y > 920) {
-        pPosition.y = 920;
+    if (pPosition.y > 940) {
+        pPosition.y = 940;
         canJump = true;
     }
     if (pRightPressed) {

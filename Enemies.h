@@ -34,7 +34,7 @@ public:
     void moveLeft(float elapsedTime);
     void moveRight(float elapsedTime);
     void setPosition(std::vector<sf::RectangleShape> plats);
-    void engage(std::vector<sf::RectangleShape> plats, float elapsedTime);
+    void engage(std::vector<sf::RectangleShape> plats, float elapsedTime, sf::Sprite player);
     void patrol(std::vector<sf::RectangleShape> plats, float elapsedTime);
     void setHome(int home);
     void generateHome(int homes[]);

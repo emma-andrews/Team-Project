@@ -87,6 +87,7 @@ void Engine::start() {//starts the game
     chestOpen = false;
     alreadyOpen = false;
 
+    chest.resetSprite();
     level.generatePlat();//generates the random platforms of the level
     chest.setPosition(level.platforms[7].getPosition());
     sf::Time gameTime = gameClock.restart();

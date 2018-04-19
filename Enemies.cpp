@@ -148,8 +148,15 @@ void Enemies::patrol(std::vector<sf::RectangleShape> plats, float elapsedTime) {
 }
 
 // Engagement function if the player get's within a specific distance of the enemy
-void Enemies::engage(std::vector<sf::RectangleShape> plats, float elapsedTime) {
+void Enemies::engage(std::vector<sf::RectangleShape> plats, float elapsedTime, sf::Sprite player) {
+    float xDifference = 0;
+    float yDifference = 0;
+//do calculations to figure out what direction to move in but not able to jump
+    xDifference = player.getGlobalBounds().left - eSprite.getGlobalBounds().left;
+    yDifference = player.getGlobalBounds().top - eSprite.getGlobalBounds().top;
+    if (xDifference < 100 && yDifference < 100) {
 
+    }
 }
 
 void Enemies::moveLeft(float elapsedTime) {

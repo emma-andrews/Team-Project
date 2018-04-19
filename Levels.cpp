@@ -11,8 +11,8 @@ Levels::Levels() {
 
     texture.loadFromFile("platform.png");
     lTexture = &texture;
-    finishPlat.setTexture(lTexture);
-    staticStair.setTexture(lTexture);
+    //finishPlat.setTexture(lTexture);
+    //staticStair.setTexture(lTexture);
 
     ssPosition.x = 100;
     ssPosition.y = 25;
@@ -109,17 +109,18 @@ void Levels::generatePlat() {
     sf::Vector2f size;
     size.x = 100;
     size.y = 25;
-    for (int i = 0; i < 17; i++) {
+    sf::Vector2f eSize;
+    for (int i = 0; i < 13; i++) {
         sf::RectangleShape plat;
         plat.setSize(size);
         plat.setFillColor(sf::Color(107, 19, 66));
-        plat.setTexture(lTexture);
+        //plat.setTexture(lTexture);
         sf::Vector2f position;
         if (!secondloop) {
-            x += 125;
+            x += 150;
         }
         else if (secondloop) {
-            x += 225;
+            x += 125;
         }
         if (x >= 1750) {
             x = 250;
@@ -129,5 +130,22 @@ void Levels::generatePlat() {
         position.x = x;
         plat.setPosition(position);
         platforms.push_back(plat);
+    }
+    int ex = 0;
+    eSize.x = 150;
+    eSize.y = 25;
+    for (int i = 0; i < 5; i++) {
+        sf::RectangleShape enemyplat;
+        sf::Vector2f position;
+        enemyplat.setFillColor(sf::Color(107, 19, 66));
+        enemyplat.setSize(eSize);
+        ex += 175;
+        if (ex >= 1750) {
+            ex = 200;
+        }
+        position.y = rand() % 800 + 140;
+        position.x = ex;
+        enemyplat.setPosition(position);
+        platforms.push_back(enemyplat);
     }
 }
