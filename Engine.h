@@ -13,6 +13,10 @@ private:
     sf::Sprite backgroundSprite;
     sf::Texture backgroundTexture;
     sf::Event event;
+    std::vector<sf::Sprite> pHearts;
+    sf::Sprite lSprite;
+    sf::Texture lTexture;
+    sf::Vector2f lPosition;
 
     sf::Text levelText;
     sf::Text livesText;

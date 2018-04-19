@@ -5,6 +5,11 @@
 Engine::Engine() {
     score = 0;
     startup = true;
+
+    lTexture.loadFromFile("heart.png");
+    lSprite.setTexture(lTexture);
+    lSprite.setScale(4,4);
+
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
     resolution.y = sf::VideoMode::getDesktopMode().height;
@@ -29,6 +34,7 @@ Engine::Engine() {
     stuckText.setFont(font);
     startText.setFont(font);
 
+    livesText.setString("Lives: ");
     finishText.setString("Level Complete!");
     endplatText.setString("FINISH");
     closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
@@ -178,11 +184,15 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     timeText.setString(s2.str());
 
     playerLives = player.getLives();
-    std::ostringstream s3;
-    s3 << "Lives: " << playerLives;
-    livesText.setString(s3.str());
 
-    //set some vect of sprites defined as private in header = player.getspritelife
+    int x = 110;
+    for (int i = 0; i < playerLives; i++) {
+        x += 40;
+        lPosition.x = x;
+        lPosition.y = 55;
+        lSprite.setPosition(lPosition);
+        pHearts.push_back(lSprite);
+    }
 }
 
 void Engine::draw() {//draws everything to the screen, called every frame in update
@@ -196,6 +206,9 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
         window.draw(level.platforms[i]);//each individual platform that was generated
     }
     //draw hearts here like above for platforms
+    for (unsigned i = 0; i < pHearts.size(); i++) {
+        window.draw(pHearts[i]);
+    }
     window.draw(levelText);//draws all the texts
     window.draw(livesText);
     window.draw(scoreText);
