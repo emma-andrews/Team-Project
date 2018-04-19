@@ -2,20 +2,22 @@
 #include <SFML/Graphics.hpp>
 #include "Coin.h"
 #include <vector>
-//increase score by 50 when the player picks up a coin
 Coin::Coin() {
     coinTexture.loadFromFile("jewel sheet.png");
     coinSprite.setTexture(coinTexture);
     sf::IntRect tempcoinrect(0,0,16,16);
     coinSprite.setTextureRect(tempcoinrect);
     coinSprite.setScale(2,2);
-    coinPosition.x = 500;
-    coinPosition.y = 950;
-
+//    coinPosition.x = 500;
+//    coinPosition.y = 950;
     cFrame = 0;
 }
 sf::Sprite Coin::getSprite() {
     return coinSprite;
+}
+void Coin::setPosition(sf::Vector2f platPosition) {
+    coinPosition.x = platPosition.x;
+    coinPosition.y = platPosition.y - coinSprite.getGlobalBounds().height;
 }
 void Coin::update() {
     if (coinClock.getElapsedTime().asSeconds() > 0.15f) {
@@ -42,6 +44,3 @@ void Coin::update() {
 //        return coin.getGlobalBounds();
 //    }
 //
-//    void setPos(sf::Vector2f newPos) {
-//        coin.setPosition(newPos);
-//    }

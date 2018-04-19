@@ -29,7 +29,7 @@ private:
     sf::Text startText;
     sf::Font font;
 
-    Player player;
+    Player *player;
     Levels level;
     Coin coin;
     Chest chest;

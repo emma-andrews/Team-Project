@@ -10,6 +10,10 @@ Levels::Levels() {
     sf::RectangleShape ceiling;
     sf::RectangleShape staticStair;
     sf::Vector2f ssPosition;
+    texture.loadFromFile("platform.png");
+    lTexture = &texture;
+    finishPlat.setTexture(lTexture);
+    staticStair.setTexture(lTexture);
 
     ssPosition.x = 100;
     ssPosition.y = 25;
@@ -18,13 +22,13 @@ Levels::Levels() {
     cPosition.y = 10;
 
     tposition.x = 100;
-    tposition.y = 25;
+    tposition.y = 20;
 
     gPosition.x = 1920;
     gPosition.y = 20;
 
     fPosition.x = 100;
-    fPosition.y = 25;
+    fPosition.y = 20;
 
     //lTexture.loadFromFile("pixil-frame-0.png");
 
@@ -54,6 +58,8 @@ Levels::Levels() {
     ceiling.setPosition(cPosition);
     finishPlat.setPosition(fPosition);
     staticStair.setPosition(ssPosition);
+
+    finishPlat.setTexture(lTexture);
 
     platforms.push_back(ground);
     //platforms.push_back(ceiling);
@@ -100,11 +106,12 @@ void Levels::generatePlat() {
     int x = 0;
     sf::Vector2f size;
     size.x = 100;
-    size.y = 25;
+    size.y = 20;
     for (int i = 0; i < 18; i++) {
         sf::RectangleShape plat;
         plat.setSize(size);
         plat.setFillColor(sf::Color(107, 19, 66));
+        plat.setTexture(lTexture);
         sf::Vector2f position;
         if (!secondloop) {
             x += 125;

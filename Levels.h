@@ -7,8 +7,8 @@
 class Levels {
 private:
     sf::Sprite lSprite;
-    sf::Texture lTexture;
-
+    const sf::Texture *lTexture;
+    sf::Texture texture;
     sf::Vector2f tposition;
     sf::Vector2f gPosition;
     sf::Vector2f fPosition;

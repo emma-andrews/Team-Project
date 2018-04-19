@@ -87,6 +87,15 @@ void Engine::start() {//starts the game
     chest.setPosition(level.platforms[7].getPosition());
     sf::Time gameTime = gameClock.restart();
 
+    for (int i = 0; i < 6; i++) {
+        coin.coins.push_back(coin);
+    }
+    int n = 7;
+    for (int i = 0; i < 6; i++) {
+        n++;
+        coin.coins[i].setPosition(level.platforms[n].getPosition());
+    }
+
     level.levelNum++;
     std::ostringstream s;
     s << "Level " << level.levelNum;
@@ -104,7 +113,7 @@ void Engine::start() {//starts the game
 
 void Engine::nextLevel() {
     //set up for next level with message saying level complete, etc.
-    player.setPosition();
+    player->setPosition();
     start();
 }
 bool open = true;
@@ -120,23 +129,23 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
             stuck = true;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-            player.moveLeft();//moves left when A is pressed
+            player->moveLeft();//moves left when A is pressed
         }
         else {
-            player.stopLeft();//does not move left when anything other than A is pressed
+            player->stopLeft();//does not move left when anything other than A is pressed
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            player.moveRight();//moves right when D is pressed
+            player->moveRight();//moves right when D is pressed
         }
         else {
-            player.stopRight();//does not move right when anything other than D is pressed
+            player->stopRight();//does not move right when anything other than D is pressed
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-            player.jump();
+            player->jump();
         }
         else {
-            player.stopJump();
+            player->stopJump();
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && !open) {
             window.close();
@@ -161,20 +170,22 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
 }
 bool alreadyOpen = false;
 void Engine::update(float dtAsSeconds, float totalTime) {
-    int col = level.checkCollision(player.getSprite());
-    player.update(dtAsSeconds, col, level.platforms);
-    levelFinished = level.checkFinished(player.getSprite());
+    int col = level.checkCollision(player->getSprite());
+    player->update(dtAsSeconds, col, level.platforms);
+    levelFinished = level.checkFinished(player->getSprite());
     if (!alreadyOpen) {
-        chestOpen = player.checkInteraction(chest.getChestSprite());
+        chestOpen = player->checkInteraction(chest.getChestSprite());
     }
     if (chestOpen) {
         chest.playAnimation();
         alreadyOpen = true;
     }
-    coin.update();
+    for (int i = 0; i < coin.coins.size(); i++) {
+        coin.coins[i].update();
+    }
     chest.update();
 
-    score = player.getScore();
+    score = player->getScore();
     std::ostringstream s1;
     s1 << "Score: " << score;
     scoreText.setString(s1.str());
@@ -183,7 +194,7 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     s2 << "Time: " << totalTime;
     timeText.setString(s2.str());
 
-    playerLives = player.getLives();
+    playerLives = player->getLives();
 
     int x = 110;
     for (int i = 0; i < playerLives; i++) {
@@ -198,8 +209,8 @@ void Engine::update(float dtAsSeconds, float totalTime) {
 void Engine::draw() {//draws everything to the screen, called every frame in update
     window.clear(sf::Color::White);//clears the window if anything is on it
     window.draw(backgroundSprite);//draws the background
-    window.draw(player.getSprite());//the player sprite
-    window.draw(coin.getSprite());//the coin sprite
+    window.draw(player->getSprite());//the player sprite
+    //window.draw(coin.getSprite());//the coin sprite
     window.draw(chest.getChestSprite());
 
     for (unsigned i = 0; i < level.platforms.size(); i++) {
@@ -208,6 +219,9 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
     //draw hearts here like above for platforms
     for (unsigned i = 0; i < pHearts.size(); i++) {
         window.draw(pHearts[i]);
+    }
+    for (unsigned i = 0; i < coin.coins.size(); i++) {
+        window.draw(coin.coins[i].getSprite());
     }
     window.draw(levelText);//draws all the texts
     window.draw(livesText);
