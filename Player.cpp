@@ -216,3 +216,22 @@ bool Player::checkInteraction(sf::Sprite chest) {
 int Player::getScore() {
     return score;
 }
+
+std::vector<sf::Sprite> Player::getLifeSprite() {
+    std::vector<sf::Sprite> vect;
+    int x = 0;
+    for (int i = 0; i <= lives; i++) {
+        sf::Sprite lSprite;
+        sf::Vector2f lPosition;
+        x += 20;
+        sf::Texture lTexture;
+        lTexture.loadFromFile("heart.png");
+        lSprite.setTexture(lTexture);
+        lSprite.getGlobalBounds().width;
+        lPosition.x = x;
+        lPosition.y = 500;
+        lSprite.setPosition(lPosition);
+        vect.push_back(lSprite);
+    }
+    return vect;
+}

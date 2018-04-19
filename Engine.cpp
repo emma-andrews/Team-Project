@@ -181,6 +181,8 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     std::ostringstream s3;
     s3 << "Lives: " << playerLives;
     livesText.setString(s3.str());
+
+    //set some vect of sprites defined as private in header = player.getspritelife
 }
 
 void Engine::draw() {//draws everything to the screen, called every frame in update
@@ -193,7 +195,7 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
     for (unsigned i = 0; i < level.platforms.size(); i++) {
         window.draw(level.platforms[i]);//each individual platform that was generated
     }
-
+    //draw hearts here like above for platforms
     window.draw(levelText);//draws all the texts
     window.draw(livesText);
     window.draw(scoreText);

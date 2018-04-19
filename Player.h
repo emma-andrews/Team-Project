@@ -50,6 +50,7 @@ public:
     int getLives();
     bool checkInteraction(sf::Sprite chest);
     int getScore();
+    std::vector<sf::Sprite> getLifeSprite();
 };
 
 #endif //TEAMPROJECT_PLAYER_H
