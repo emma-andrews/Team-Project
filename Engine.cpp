@@ -1,8 +1,10 @@
 #include "Engine.h"
 #include <SFML/Graphics.hpp>
 #include <sstream>
+#include <iostream>
 
 Engine::Engine() {
+    player = new Player();
     score = 0;
     startup = true;
 
@@ -81,6 +83,7 @@ void Engine::start() {//starts the game
     sf::Clock clock;
     sf::Clock gameClock;
     levelFinished = false;//the level is not finished since it just started
+    levelLost = false;
     chestOpen = false;
 
     level.generatePlat();//generates the random platforms of the level
@@ -94,6 +97,16 @@ void Engine::start() {//starts the game
     for (int i = 0; i < 6; i++) {
         n++;
         coin.coins[i].setPosition(level.platforms[n].getPosition());
+    }
+
+
+    // Enemy initialization
+    int numbers[5];
+    // Home generation
+    enemies->generateHome(numbers);
+    for (int i = 0; i < 5; i++) {
+        enemies[i].setHome(numbers[i]);
+        enemies[i].spawn(level.platforms);
     }
 
     level.levelNum++;
@@ -116,6 +129,7 @@ void Engine::nextLevel() {
     player->setPosition();
     start();
 }
+
 bool open = true;
 bool stuck = false;
 void Engine::input() {//calculates user inputs and what actions are performed based on input
@@ -185,6 +199,15 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     }
     chest.update();
 
+    // Update the enemies status
+    for (int i = 0; i < 5; i++) {
+        enemies[i].update(player, dtAsSeconds, level.platforms);
+        if (player->getSprite().getGlobalBounds().intersects(enemies[i].getSprite().getGlobalBounds())) {
+            player->setLives(player->getLives() - 1);
+            levelLost = true;
+        }
+    }
+
     score = player->getScore();
     std::ostringstream s1;
     s1 << "Score: " << score;
@@ -222,6 +245,10 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
     }
     for (unsigned i = 0; i < coin.coins.size(); i++) {
         window.draw(coin.coins[i].getSprite());
+    }
+
+    for (unsigned i = 0; i < 5; i++) {
+        window.draw(enemies[i].getSprite());
     }
     window.draw(levelText);//draws all the texts
     window.draw(livesText);

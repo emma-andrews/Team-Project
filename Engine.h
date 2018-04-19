@@ -6,6 +6,7 @@
 #include "Levels.h"
 #include "Coin.h"
 #include "Chest.h"
+#include "Enemies.h"
 
 class Engine {
 private:
@@ -33,8 +34,10 @@ private:
     Levels level;
     Coin coin;
     Chest chest;
+    Enemies enemies[5];
 
     bool levelFinished;
+    bool levelLost;
     bool chestOpen;
     bool startup;
     int playerLives;

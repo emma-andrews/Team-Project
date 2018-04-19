@@ -40,6 +40,8 @@ public:
     sf::Sprite getSprite();
     void setPosition();
     void moveLeft();
+    int getX();
+    int getY();
     void moveRight();
     void stopLeft();
     void stopRight();
