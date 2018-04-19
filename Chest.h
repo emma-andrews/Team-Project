@@ -24,6 +24,7 @@ public:
     void setPosition(sf::Vector2f platPosition);
     void update();
     void playAnimation();
+    void resetSprite();
 };
 
 #endif //TEAMPROJECT_CHEST_H

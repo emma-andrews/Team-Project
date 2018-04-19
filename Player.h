@@ -29,7 +29,8 @@ private:
     int lFrame;
     int irFrame;
     int ilFrame;
-    int jFrame;
+    int jrFrame;
+    int jlFrame;
     int score;
 
 public:
@@ -40,6 +41,8 @@ public:
     sf::Sprite getSprite();
     void setPosition();
     void moveLeft();
+    int getX();
+    int getY();
     void moveRight();
     void stopLeft();
     void stopRight();

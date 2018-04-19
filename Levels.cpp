@@ -8,8 +8,7 @@ Levels::Levels() {
     srand(time(nullptr));
     sf::Vector2f cPosition;
     sf::RectangleShape ceiling;
-    sf::RectangleShape staticStair;
-    sf::Vector2f ssPosition;
+
     texture.loadFromFile("platform.png");
     lTexture = &texture;
     finishPlat.setTexture(lTexture);
@@ -22,7 +21,7 @@ Levels::Levels() {
     cPosition.y = 10;
 
     tposition.x = 100;
-    tposition.y = 20;
+    tposition.y = 25;
 
     gPosition.x = 1920;
     gPosition.y = 20;
@@ -45,7 +44,7 @@ Levels::Levels() {
     staticStair.setSize(ssPosition);
 
     ssPosition.x = 270;
-    ssPosition.y = 700;
+    ssPosition.y = 875;
     tposition.y = 850;
     fPosition.x = 1700;
     fPosition.y = 200;
@@ -59,11 +58,14 @@ Levels::Levels() {
     finishPlat.setPosition(fPosition);
     staticStair.setPosition(ssPosition);
 
-    finishPlat.setTexture(lTexture);
-
     platforms.push_back(ground);
     //platforms.push_back(ceiling);
     platforms.push_back(finishPlat);
+    platforms.push_back(staticStair);
+
+    ssPosition.x = 1850;
+    ssPosition.y = 350;
+    staticStair.setPosition(ssPosition);
     platforms.push_back(staticStair);
 }
 
@@ -81,7 +83,7 @@ sf::RectangleShape Levels::getPlatforms(int index) {
 }
 
 void Levels::popPlat() {
-    for (unsigned i = 0; i < platforms.size() - 5; i++) {
+    for (unsigned i = 0; i < platforms.size() - 4; i++) {
         platforms.pop_back();//removes all platforms except for the ground, ceiling, sides, and the finish platform
     }
 }
@@ -106,8 +108,8 @@ void Levels::generatePlat() {
     int x = 0;
     sf::Vector2f size;
     size.x = 100;
-    size.y = 20;
-    for (int i = 0; i < 18; i++) {
+    size.y = 25;
+    for (int i = 0; i < 17; i++) {
         sf::RectangleShape plat;
         plat.setSize(size);
         plat.setFillColor(sf::Color(107, 19, 66));
@@ -117,10 +119,10 @@ void Levels::generatePlat() {
             x += 125;
         }
         else if (secondloop) {
-            x += 160;
+            x += 225;
         }
         if (x >= 1750) {
-            x = 125;
+            x = 250;
             secondloop = true;
         }
         position.y = rand() % 800 + 140;

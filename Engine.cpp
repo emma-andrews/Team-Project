@@ -5,6 +5,9 @@
 Engine::Engine() {
     score = 0;
     startup = true;
+    //alreadyOpen = false;
+
+    player = new Player();
 
     lTexture.loadFromFile("heart.png");
     lSprite.setTexture(lTexture);
@@ -82,6 +85,7 @@ void Engine::start() {//starts the game
     sf::Clock gameClock;
     levelFinished = false;//the level is not finished since it just started
     chestOpen = false;
+    alreadyOpen = false;
 
     level.generatePlat();//generates the random platforms of the level
     chest.setPosition(level.platforms[7].getPosition());
@@ -94,6 +98,14 @@ void Engine::start() {//starts the game
     for (int i = 0; i < 6; i++) {
         n++;
         coin.coins[i].setPosition(level.platforms[n].getPosition());
+    }
+
+    int numbers[5];
+    // Home generation
+    enemies->generateHome(numbers);
+    for (int i = 0; i < 5; i++) {
+        enemies[i].setHome(numbers[i]);
+        enemies[i].spawn(level.platforms);
     }
 
     level.levelNum++;
@@ -168,11 +180,16 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
         }
     }
 }
-bool alreadyOpen = false;
+
 void Engine::update(float dtAsSeconds, float totalTime) {
     int col = level.checkCollision(player->getSprite());
     player->update(dtAsSeconds, col, level.platforms);
-    levelFinished = level.checkFinished(player->getSprite());
+    for (unsigned i = 0; i < coin.coins.size(); i++) {
+        if (player->getSprite().getGlobalBounds().intersects(coin.coins[i].getSprite().getGlobalBounds())) {
+            coin.coins.erase(coin.coins.begin() + i);
+        }
+    }
+    levelFinished = level.checkFinished(player->getSprite()) && coin.coins.size() == 0;
     if (!alreadyOpen) {
         chestOpen = player->checkInteraction(chest.getChestSprite());
     }
@@ -184,6 +201,15 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         coin.coins[i].update();
     }
     chest.update();
+
+    // Update the enemies status
+    for (int i = 0; i < 5; i++) {
+        enemies[i].update(player, dtAsSeconds, level.platforms);
+        if (player->getSprite().getGlobalBounds().intersects(enemies[i].getSprite().getGlobalBounds())) {
+            player->setLives(player->getLives() - 1);
+            levelLost = true;
+        }
+    }
 
     score = player->getScore();
     std::ostringstream s1;
@@ -222,6 +248,9 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
     }
     for (unsigned i = 0; i < coin.coins.size(); i++) {
         window.draw(coin.coins[i].getSprite());
+    }
+    for (unsigned i = 0; i < 5; i++) {
+        window.draw(enemies[i].getSprite());
     }
     window.draw(levelText);//draws all the texts
     window.draw(livesText);

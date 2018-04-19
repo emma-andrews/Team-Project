@@ -52,11 +52,31 @@ std::vector<sf::IntRect> Animation::playerRJump() {
     sf::IntRect runSource(0, 80, 26, 37);
     while (runSource.left <= 70) {
         vect.push_back(runSource);
-        runSource.left += 30;
+        if (!second) {
+            runSource.left += 30;
+            second = true;
+        }
         if (second) {
             runSource.left += 35;
         }
-        second = true;
+
+    }
+    return vect;
+}
+
+std::vector<sf::IntRect> Animation::playerLJump() {
+    std::vector<sf::IntRect> vect;
+    bool second = false;
+    sf::IntRect runSource(69, 80, 30, 35);
+    while (runSource.left <= 134) {
+        vect.push_back(runSource);
+        if (!second) {
+            runSource.left += 30;
+            second = true;
+        }
+        if (second) {
+            runSource.left += 40;
+        }
     }
     return vect;
 }
@@ -77,6 +97,21 @@ std::vector<sf::IntRect> Animation::chestOpen() {//animation for chest opening
     while (openSource.left <= 48) {
         vect.push_back(openSource);
         openSource.left += 17;
+    }
+    return vect;
+}
+
+std::vector<sf::IntRect> Animation::batFly() {
+    bool first = true;
+    bool forty = false;
+    std::vector<sf::IntRect> vect;
+    sf::IntRect flySource(0, 0, 44, 28);
+    while (flySource.left <= 280) {
+        vect.push_back(flySource);
+        if (first) {
+            flySource.left += 50;
+            first = false;
+        }
     }
     return vect;
 }

@@ -14,8 +14,10 @@ public:
     std::vector<sf::IntRect> playerRRun();
     std::vector<sf::IntRect> playerLRun();
     std::vector<sf::IntRect> playerRJump();
+    std::vector<sf::IntRect> playerLJump();
     std::vector<sf::IntRect> coinTurn();
     std::vector<sf::IntRect> chestOpen();
+    std::vector<sf::IntRect> batFly();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H

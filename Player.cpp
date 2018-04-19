@@ -13,7 +13,8 @@ Player::Player() {
     lFrame = 0;
     irFrame = 0;
     ilFrame = 0;
-    jFrame = 0;
+    jrFrame = 0;
+    jlFrame = 0;
     lives = 3;//start with 3 lives
     score = 0;
 
@@ -122,14 +123,27 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         }
     }
     if (pJump) {
-        if (aniClock.getElapsedTime().asSeconds() > 0.2f) {
-            aniRect = animation.playerRJump();
-            pSprite.setTextureRect(aniRect[jFrame]);
-            jFrame++;
-            if (jFrame >= aniRect.size()) {
-                jFrame = 0;
+        if (rightLast) {
+            if (aniClock.getElapsedTime().asSeconds() > 0.2f) {
+                aniRect = animation.playerRJump();
+                pSprite.setTextureRect(aniRect[jrFrame]);
+                jrFrame++;
+                if (jrFrame >= aniRect.size()) {
+                    jrFrame = aniRect.size() - 1;
+                }
+                aniClock.restart();
             }
-            aniClock.restart();
+        }
+        else if (leftLast) {
+            if (aniClock.getElapsedTime().asSeconds() > 0.2f) {
+                aniRect = animation.playerLJump();
+                pSprite.setTextureRect(aniRect[jlFrame]);
+                jlFrame++;
+                if (jlFrame >= aniRect.size()) {
+                    jlFrame = aniRect.size() - 1;
+                }
+                aniClock.restart();
+            }
         }
     }
     if (collision >= 0) {
@@ -215,4 +229,12 @@ bool Player::checkInteraction(sf::Sprite chest) {
 
 int Player::getScore() {
     return score;
+}
+
+int Player::getX() {
+    return pPosition.x;
+}
+
+int Player::getY() {
+    return pPosition.y;
 }

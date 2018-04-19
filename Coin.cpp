@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Coin.h"
 #include <vector>
+
 Coin::Coin() {
     coinTexture.loadFromFile("jewel sheet.png");
     coinSprite.setTexture(coinTexture);
@@ -16,7 +17,7 @@ sf::Sprite Coin::getSprite() {
     return coinSprite;
 }
 void Coin::setPosition(sf::Vector2f platPosition) {
-    coinPosition.x = platPosition.x;
+    coinPosition.x = platPosition.x + coinSprite.getGlobalBounds().width;
     coinPosition.y = platPosition.y - coinSprite.getGlobalBounds().height;
 }
 void Coin::update() {

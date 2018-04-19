@@ -18,7 +18,7 @@ sf::Sprite Chest::getChestSprite() {
 }
 
 void Chest::setPosition(sf::Vector2f platPosition) {
-    cPosition.x = platPosition.x;
+    cPosition.x = platPosition.x + cSprite.getGlobalBounds().width;
     cPosition.y = platPosition.y - cSprite.getGlobalBounds().height;
 }
 
@@ -42,4 +42,9 @@ void Chest::playAnimation() {
         }
         cClock.restart();
     }
+}
+
+void Chest::resetSprite() {
+    sf::IntRect ctempRect(0, 0, 16, 16);
+    cSprite.setTextureRect(ctempRect);
 }
