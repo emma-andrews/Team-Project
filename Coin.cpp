@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Coin.h"
 #include <vector>
-
+//increase score by 50 when the player picks up a coin
 Coin::Coin() {
     coinTexture.loadFromFile("jewel sheet.png");
     coinSprite.setTexture(coinTexture);

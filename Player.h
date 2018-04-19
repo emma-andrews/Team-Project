@@ -30,6 +30,7 @@ private:
     int irFrame;
     int ilFrame;
     int jFrame;
+    int score;
 
 public:
     sf::Clock aniClock;
@@ -48,6 +49,7 @@ public:
     void setLives(int num);
     int getLives();
     bool checkInteraction(sf::Sprite chest);
+    int getScore();
 };
 
 #endif //TEAMPROJECT_PLAYER_H

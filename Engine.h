@@ -22,6 +22,7 @@ private:
     sf::Text timeText;
     sf::Text closeText;
     sf::Text stuckText;
+    sf::Text startText;
     sf::Font font;
 
     Player player;
@@ -31,7 +32,9 @@ private:
 
     bool levelFinished;
     bool chestOpen;
+    bool startup;
     int playerLives;
+    int score;
     float lGameTime;
     void input();
     void update(float dtAsSeconds, float totalTime);

@@ -3,6 +3,8 @@
 #include <sstream>
 
 Engine::Engine() {
+    score = 0;
+    startup = true;
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
     resolution.y = sf::VideoMode::getDesktopMode().height;
@@ -25,12 +27,13 @@ Engine::Engine() {
     timeText.setFont(font);
     closeText.setFont(font);
     stuckText.setFont(font);
+    startText.setFont(font);
 
-    scoreText.setString("Score: 0");
     finishText.setString("Level Complete!");
     endplatText.setString("FINISH");
     closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
     stuckText.setString("Are you stuck?\nYES: Y\tNO: N");
+    startText.setString("Please enter your name: ");
 
     levelText.setCharacterSize(30);//sets the size of the text
     livesText.setCharacterSize(30);
@@ -40,6 +43,7 @@ Engine::Engine() {
     endplatText.setCharacterSize(25);
     closeText.setCharacterSize(40);
     stuckText.setCharacterSize(40);
+    startText.setCharacterSize(50);
 
     levelText.setFillColor(sf::Color::White);//sets the color of the text
     livesText.setFillColor(sf::Color::White);
@@ -49,6 +53,7 @@ Engine::Engine() {
     endplatText.setFillColor(sf::Color(255, 162, 40));//rgb is an orange color
     closeText.setFillColor(sf::Color::White);
     stuckText.setFillColor(sf::Color::White);
+    startText.setFillColor(sf::Color::White);
 
     levelText.setPosition(20, 20);//sets the text at a position on the screen
     livesText.setPosition(20, 50);
@@ -58,16 +63,24 @@ Engine::Engine() {
     endplatText.setPosition(1705, 170);
     closeText.setPosition(560, 540);
     stuckText.setPosition(560, 540);
+    startText.setPosition(560, 540);
 }
 
 void Engine::start() {//starts the game
+//    if (startup) {
+//        window.clear(sf::Color::Black);
+//        window.draw(startText);
+//        window.display();
+//    }
     sf::Clock clock;
     sf::Clock gameClock;
     levelFinished = false;//the level is not finished since it just started
     chestOpen = false;
+
     level.generatePlat();//generates the random platforms of the level
     chest.setPosition(level.platforms[7].getPosition());
     sf::Time gameTime = gameClock.restart();
+
     level.levelNum++;
     std::ostringstream s;
     s << "Level " << level.levelNum;
@@ -154,6 +167,12 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     }
     coin.update();
     chest.update();
+
+    score = player.getScore();
+    std::ostringstream s1;
+    s1 << "Score: " << score;
+    scoreText.setString(s1.str());
+
     std::ostringstream s2;
     s2 << "Time: " << totalTime;
     timeText.setString(s2.str());

@@ -15,6 +15,7 @@ Player::Player() {
     ilFrame = 0;
     jFrame = 0;
     lives = 3;//start with 3 lives
+    score = 0;
 
     pTexture.loadFromFile("player character sheet.png");
     pSprite.setTexture(pTexture);//sets the texture of the player to be the sheet of all frames of the player
@@ -203,10 +204,15 @@ bool Player::checkInteraction(sf::Sprite chest) {
         }
         else if (chance == 2) {
             //increase score by some amount
+            score += 100;
         }
         return true;
     }
     else {
         return false;
     }
+}
+
+int Player::getScore() {
+    return score;
 }

@@ -14,9 +14,7 @@ Please remember to push early and often! We do not want any lost work (if you wa
 
  FEATURES TO DO: (~~~ indicates std line count increase)
  scoring system
- time system
  not proceed in level until all coins are picked up
- better random platform spawning
  animate enemies
  ~~~write to a file to keep high scores
  bonus level
