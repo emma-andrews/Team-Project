@@ -21,6 +21,7 @@ private:
     sf::RectangleShape finishPlat;
 
     bool validPosition;
+    std::vector<sf::RectangleShape> temp;
 
 public:
     int levelNum;

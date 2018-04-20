@@ -22,8 +22,8 @@ Player::Player() {
     pSprite.setTexture(pTexture);//sets the texture of the player to be the sheet of all frames of the player
     pSprite.setTextureRect(textRect);//sets the current texture of the sprite to the rectangle starting at position 0,0 and extending to 30 by 40
     pSprite.setScale(2,2);//scales sprite by 2 so it is 64 by 64
-    pPosition.x = 500;//initial starting position
-    pPosition.y = 800;
+    pPosition.x = 50;//initial starting position
+    pPosition.y = 920;
 }
 
 //void Player::setSprite(sf::IntRect aniRect) {
@@ -75,8 +75,8 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
     pPosition.x += pVelocity.x * elapsedTime;
     pPosition.y += pVelocity.y * gravity * elapsedTime * 3;
     pVelocity.y += gravity * elapsedTime;
-    if (pPosition.y > 940) {
-        pPosition.y = 940;
+    if (pPosition.y > 920) {
+        pPosition.y = 920;
         canJump = true;
     }
     if (pRightPressed) {
@@ -229,6 +229,10 @@ bool Player::checkInteraction(sf::Sprite chest) {
 
 int Player::getScore() {
     return score;
+}
+
+void Player::setScore(int num) {
+    score += num;
 }
 
 int Player::getX() {

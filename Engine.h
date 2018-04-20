@@ -28,6 +28,8 @@ private:
     sf::Text closeText;
     sf::Text stuckText;
     sf::Text startText;
+    sf::Text remainText;
+    sf::Text openText;
     sf::Font font;
 
     Player *player;
@@ -41,6 +43,7 @@ private:
     bool chestOpen;
     bool startup;
     bool alreadyOpen;
+    bool exitOpen;
     int playerLives;
     int score;
     float lGameTime;

@@ -36,6 +36,7 @@ private:
 public:
     sf::Clock aniClock;
     sf::Time da;
+
     Player();
     //void setSprite(sf::IntRect aniRect);
     sf::Sprite getSprite();
@@ -53,6 +54,7 @@ public:
     int getLives();
     bool checkInteraction(sf::Sprite chest);
     int getScore();
+    void setScore(int num);
 };
 
 #endif //TEAMPROJECT_PLAYER_H

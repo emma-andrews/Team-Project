@@ -19,6 +19,7 @@ Engine::Engine() {
 
     window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Resize);//creates render window which the game will be displayed on
     //creates the window
+
     backgroundTexture.loadFromFile("cyberpunk-street.png");//608 by 192
     backgroundSprite.setTexture(backgroundTexture);
 
@@ -36,6 +37,8 @@ Engine::Engine() {
     closeText.setFont(font);
     stuckText.setFont(font);
     startText.setFont(font);
+    remainText.setFont(font);
+    openText.setFont(font);
 
     livesText.setString("Lives: ");
     finishText.setString("Level Complete!");
@@ -43,6 +46,7 @@ Engine::Engine() {
     closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
     stuckText.setString("Are you stuck?\nYES: Y\tNO: N");
     startText.setString("Please enter your name: ");
+    openText.setString("EXIT OPENED!");
 
     levelText.setCharacterSize(30);//sets the size of the text
     livesText.setCharacterSize(30);
@@ -53,6 +57,8 @@ Engine::Engine() {
     closeText.setCharacterSize(40);
     stuckText.setCharacterSize(40);
     startText.setCharacterSize(50);
+    remainText.setCharacterSize(30);
+    openText.setCharacterSize(40);
 
     levelText.setFillColor(sf::Color::White);//sets the color of the text
     livesText.setFillColor(sf::Color::White);
@@ -63,6 +69,8 @@ Engine::Engine() {
     closeText.setFillColor(sf::Color::White);
     stuckText.setFillColor(sf::Color::White);
     startText.setFillColor(sf::Color::White);
+    remainText.setFillColor(sf::Color::White);
+    openText.setFillColor(sf::Color(255, 162, 40));
 
     levelText.setPosition(20, 20);//sets the text at a position on the screen
     livesText.setPosition(20, 50);
@@ -73,6 +81,8 @@ Engine::Engine() {
     closeText.setPosition(560, 540);
     stuckText.setPosition(560, 540);
     startText.setPosition(560, 540);
+    remainText.setPosition(20, 140);
+    openText.setPosition(560, 30);
 }
 
 void Engine::start() {//starts the game
@@ -86,6 +96,7 @@ void Engine::start() {//starts the game
     levelFinished = false;//the level is not finished since it just started
     chestOpen = false;
     alreadyOpen = false;
+    exitOpen = false;
 
     chest.resetSprite();
     level.generatePlat();//generates the random platforms of the level
@@ -170,6 +181,7 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && stuck) {
             stuck = false;
+            level.levelNum--;//did not pass level, counteracts increment in start()
             window.clear();
             level.popPlat();
             nextLevel();
@@ -188,7 +200,11 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     for (unsigned i = 0; i < coin.coins.size(); i++) {
         if (player->getSprite().getGlobalBounds().intersects(coin.coins[i].getSprite().getGlobalBounds())) {
             coin.coins.erase(coin.coins.begin() + i);
+            player->setScore(100);
         }
+    }
+    if (coin.coins.empty()) {
+        exitOpen = true;
     }
     levelFinished = level.checkFinished(player->getSprite()) && coin.coins.size() == 0;
     if (!alreadyOpen) {
@@ -220,6 +236,10 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     std::ostringstream s2;
     s2 << "Time: " << totalTime;
     timeText.setString(s2.str());
+
+    std::ostringstream s3;
+    s3 << "Jewels Remaining: " << coin.coins.size();
+    remainText.setString(s3.str());
 
     playerLives = player->getLives();
 
@@ -258,7 +278,10 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
     window.draw(scoreText);
     window.draw(endplatText);
     window.draw(timeText);
-
+    window.draw(remainText);
+    if (exitOpen) {
+        window.draw(openText);
+    }
     if(!open){//if the user enters esc to exit the game
         window.draw(closeText);
     }

@@ -9,7 +9,7 @@ const float maxY = 2.5f;
 const float gravity = 30.0f;
 
 // Monster box
-sf::IntRect monsterRect(0,0,32,32);
+sf::IntRect monsterRect(0,0,30,27);
 
 // Default constructor for monsters
 Enemies::Enemies() {
@@ -21,7 +21,7 @@ Enemies::Enemies() {
     ilFrame = 0;
     jFrame = 0;
 
-    eTexture.loadFromFile("platformer slime_Animation 1_0.png");
+    eTexture.loadFromFile("slime sheet.png");
     eSprite.setTexture(eTexture);
     eSprite.setTextureRect(monsterRect);
     eSprite.setScale(2,2);
@@ -85,7 +85,17 @@ void Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangl
     } else if (ePosition.x > plats[home].getPosition().x + plats[home].getGlobalBounds().width + 20 - eSprite.getGlobalBounds().width) {
         spawn(plats);
     }
+    if (eAniClock.getElapsedTime().asSeconds() > 0.3f) {
+        eAniRect = monAnim.slime();
+        eSprite.setTextureRect(eAniRect[rFrame]);
+        rFrame++;
+        if (rFrame >= eAniRect.size() - 1) {
+            rFrame = 0;
+        }
+        eAniClock.restart();
+    }
     // Update the sprites location
+    engage(elapsedTime, player->getSprite());
     eSprite.setPosition(ePosition);
 }
 
@@ -148,14 +158,16 @@ void Enemies::patrol(std::vector<sf::RectangleShape> plats, float elapsedTime) {
 }
 
 // Engagement function if the player get's within a specific distance of the enemy
-void Enemies::engage(std::vector<sf::RectangleShape> plats, float elapsedTime, sf::Sprite player) {
+void Enemies::engage(float elapsedTime, sf::Sprite player) {
     float xDifference = 0;
-    float yDifference = 0;
 //do calculations to figure out what direction to move in but not able to jump
     xDifference = player.getGlobalBounds().left - eSprite.getGlobalBounds().left;
-    yDifference = player.getGlobalBounds().top - eSprite.getGlobalBounds().top;
-    if (xDifference < 100 && yDifference < 100) {
 
+    if (xDifference < 100 && xDifference > 0) {
+        moveRight(elapsedTime);
+    }
+    else if (xDifference > -100 && xDifference < 0) {
+        moveLeft(elapsedTime);
     }
 }
 

@@ -115,3 +115,13 @@ std::vector<sf::IntRect> Animation::batFly() {
     }
     return vect;
 }
+
+std::vector<sf::IntRect> Animation::slime() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect openSource(0, 0, 30, 27);
+    while (openSource.left <= 120) {
+        vect.push_back(openSource);
+        openSource.left += 30;
+    }
+    return vect;
+}

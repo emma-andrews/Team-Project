@@ -11,8 +11,8 @@ Levels::Levels() {
 
     texture.loadFromFile("platform.png");
     lTexture = &texture;
-    //finishPlat.setTexture(lTexture);
-    //staticStair.setTexture(lTexture);
+    finishPlat.setTexture(lTexture);
+    staticStair.setTexture(lTexture);
 
     ssPosition.x = 100;
     ssPosition.y = 25;
@@ -63,8 +63,8 @@ Levels::Levels() {
     platforms.push_back(finishPlat);
     platforms.push_back(staticStair);
 
-    ssPosition.x = 1850;
-    ssPosition.y = 350;
+    ssPosition.x = 1825;
+    ssPosition.y = 375;
     staticStair.setPosition(ssPosition);
     platforms.push_back(staticStair);
 }
@@ -120,10 +120,14 @@ void Levels::generatePlat() {
             x += 150;
         }
         else if (secondloop) {
-            x += 125;
+            x -= 200;
+            if (x < 0) {
+                secondloop = false;
+                x = 50;
+            }
         }
-        if (x >= 1750) {
-            x = 250;
+        if (x >= 1725) {
+            x = 1675;
             secondloop = true;
         }
         position.y = rand() % 800 + 140;
@@ -131,6 +135,9 @@ void Levels::generatePlat() {
         plat.setPosition(position);
         platforms.push_back(plat);
     }
+
+    //check for platform intersections and bad offsets in y direction
+
     int ex = 0;
     eSize.x = 150;
     eSize.y = 25;
@@ -140,7 +147,7 @@ void Levels::generatePlat() {
         enemyplat.setFillColor(sf::Color(107, 19, 66));
         enemyplat.setSize(eSize);
         ex += 175;
-        if (ex >= 1750) {
+        if (ex >= 1725) {
             ex = 200;
         }
         position.y = rand() % 800 + 140;
