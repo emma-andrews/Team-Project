@@ -178,3 +178,10 @@ void Enemies::moveLeft(float elapsedTime) {
 void Enemies::moveRight(float elapsedTime) {
     ePosition.x += eSpeed * elapsedTime;
 }
+
+void Enemies::checkKill(sf::Sprite player) {
+    float difference = eSprite.getGlobalBounds().top - (player.getGlobalBounds().top + player.getGlobalBounds().height);
+    if (difference == 0) {
+        //delete the enemy
+    }
+}

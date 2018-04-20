@@ -83,9 +83,10 @@ sf::RectangleShape Levels::getPlatforms(int index) {
 }
 
 void Levels::popPlat() {
-    for (unsigned i = 0; i < platforms.size() - 4; i++) {
-        platforms.pop_back();//removes all platforms except for the ground, ceiling, sides, and the finish platform
-    }
+    platforms.clear();
+    platforms.push_back(ground);
+    platforms.push_back(finishPlat);
+    platforms.push_back(staticStair);
 }
 
 bool Levels::isEmpty() {
@@ -136,8 +137,6 @@ void Levels::generatePlat() {
         platforms.push_back(plat);
     }
 
-    //check for platform intersections and bad offsets in y direction
-
     int ex = 0;
     eSize.x = 150;
     eSize.y = 25;
@@ -154,5 +153,25 @@ void Levels::generatePlat() {
         position.x = ex;
         enemyplat.setPosition(position);
         platforms.push_back(enemyplat);
+    }
+    sf::Vector2f tempPosition;
+    //check for platform intersections and bad offsets in y direction
+    for (unsigned i = 0; i < platforms.size(); i++) {
+        for (unsigned j = 0; j < platforms.size(); j++) {
+            float xDifference;
+            float yDifference;
+            xDifference = platforms[i].getGlobalBounds().left - platforms[j].getGlobalBounds().left;
+            yDifference = platforms[i].getGlobalBounds().top - platforms[j].getGlobalBounds().top;
+            bool intersect;
+            bool tooClose;
+
+            intersect = platforms[i].getGlobalBounds().intersects(platforms[j].getGlobalBounds());
+            tooClose = (xDifference > -110 && xDifference < 110) && (yDifference > -75 && yDifference < 75);
+            if (i != j && (intersect || tooClose)) {
+                tempPosition.x = platforms[i].getGlobalBounds().left;
+                tempPosition.y = rand() % 800 + 140;
+                platforms[i].setPosition(tempPosition);
+            }
+        }
     }
 }

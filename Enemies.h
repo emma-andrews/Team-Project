@@ -40,6 +40,7 @@ public:
     void generateHome(int homes[]);
     void update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats);
     void spawn(std::vector<sf::RectangleShape> plats);
+    void checkKill (sf::Sprite player);
 };
 
 #endif //TEAMPROJECT_ENEMIES_H

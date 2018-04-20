@@ -13,9 +13,6 @@ Additionally, there are many resources out there for learning how to code a 2D p
 Please remember to push early and often! We do not want any lost work (if you want, you can create your own branch for what you are working on)
 
  FEATURES TO DO: (~~~ indicates std line count increase)
- scoring system
- not proceed in level until all coins are picked up
- animate enemies
  ~~~write to a file to keep high scores
  bonus level
  ~~~create different enemy types

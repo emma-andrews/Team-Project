@@ -40,6 +40,7 @@ private:
 
     bool levelFinished;
     bool levelLost;
+    bool flash;
     bool chestOpen;
     bool startup;
     bool alreadyOpen;
@@ -51,6 +52,7 @@ private:
     void update(float dtAsSeconds, float totalTime);
     void draw();
     void nextLevel();
+    void gameOver();
 
 public:
     Engine();

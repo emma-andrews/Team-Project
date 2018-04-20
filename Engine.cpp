@@ -1,10 +1,12 @@
 #include "Engine.h"
 #include <SFML/Graphics.hpp>
 #include <sstream>
+#include <iostream>
 
 Engine::Engine() {
     score = 0;
     startup = true;
+    flash = false;
     //alreadyOpen = false;
 
     player = new Player();
@@ -93,15 +95,19 @@ void Engine::start() {//starts the game
 //    }
     sf::Clock clock;
     sf::Clock gameClock;
+
     levelFinished = false;//the level is not finished since it just started
     chestOpen = false;
     alreadyOpen = false;
     exitOpen = false;
+    levelLost = false;
+    coin.coins.clear();
+    lGameTime = 0;
 
     chest.resetSprite();
     level.generatePlat();//generates the random platforms of the level
     chest.setPosition(level.platforms[7].getPosition());
-    sf::Time gameTime = gameClock.restart();
+
 
     for (int i = 0; i < 6; i++) {
         coin.coins.push_back(coin);
@@ -124,11 +130,12 @@ void Engine::start() {//starts the game
     std::ostringstream s;
     s << "Level " << level.levelNum;
     levelText.setString(s.str());
-
+    sf::Time gameTime = gameClock.restart();
+    gameClock.restart();
     while (window.isOpen()) {//updates the game every frame
         sf::Time dt = clock.restart();
         float dtAsSeconds = dt.asSeconds();//gets the elapsed time
-        lGameTime += gameTime.asSeconds();
+        lGameTime = gameClock.getElapsedTime().asSeconds();
         input();//receives input from user during this frame
         update(dtAsSeconds, lGameTime);//calls for updates based on elapsed time and user input
         draw();//draws all sprites, texts, and shapes to the render window
@@ -224,8 +231,10 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         enemies[i].update(player, dtAsSeconds, level.platforms);
         if (player->getSprite().getGlobalBounds().intersects(enemies[i].getSprite().getGlobalBounds())) {
             player->setLives(player->getLives() - 1);
-            levelLost = true;
         }
+    }
+    if (player->getLives() == 0) {
+        levelLost = true;
     }
 
     score = player->getScore();
@@ -242,6 +251,9 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     remainText.setString(s3.str());
 
     playerLives = player->getLives();
+    if (player->getLives() == 0) {
+        levelLost = true;
+    }
 
     int x = 110;
     for (int i = 0; i < playerLives; i++) {
@@ -250,6 +262,19 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         lPosition.y = 55;
         lSprite.setPosition(lPosition);
         pHearts.push_back(lSprite);
+    }
+    if (exitOpen) {
+        if (flash) {
+            openText.setFillColor(sf::Color::White);
+            flash = false;
+        }
+        else if (!flash) {
+            openText.setFillColor(sf::Color(255, 162, 40));
+            flash = true;
+        }
+    }
+    if (levelLost) {
+        gameOver();
     }
 }
 
@@ -297,5 +322,24 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
         window.clear();
         level.popPlat();
         nextLevel();
+    }
+}
+
+void Engine::gameOver() {
+    window.clear(sf::Color::Black);
+    sf::Text overText;
+    overText.setFont(font);
+    overText.setFillColor(sf::Color::Red);
+    overText.setString("GAME OVER\nRetry?\nYes: Y\tNo: N");
+    overText.setCharacterSize(40);
+    overText.setPosition(700, 540);
+    window.draw(overText);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
+        window.close();
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+        window.clear();
+        start();
     }
 }
