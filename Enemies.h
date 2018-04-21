@@ -12,6 +12,7 @@ private:
     sf::Sprite eSprite;
     sf::Texture sTexture;
     sf::Texture bTexture;
+    sf::Texture ssTexture;
     std::vector<sf::IntRect> eAniRect;
 
     Animation monAnim;
@@ -25,6 +26,7 @@ private:
     int home;
     int startDir;
     bool slime;
+    bool slime2;
     bool bat;
     bool kill;
 

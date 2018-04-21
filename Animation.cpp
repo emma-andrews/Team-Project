@@ -120,3 +120,13 @@ std::vector<sf::IntRect> Animation::slime() {
     }
     return vect;
 }
+
+std::vector<sf::IntRect> Animation::slime2() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect openSource(0, 0, 30, 32);
+    while (openSource.left <= 120) {
+        vect.push_back(openSource);
+        openSource.left += 30;
+    }
+    return vect;
+}

@@ -19,6 +19,7 @@ public:
     std::vector<sf::IntRect> chestOpen();
     std::vector<sf::IntRect> batFly();
     std::vector<sf::IntRect> slime();
+    std::vector<sf::IntRect> slime2();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H

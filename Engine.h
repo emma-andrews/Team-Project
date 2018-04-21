@@ -56,6 +56,7 @@ private:
     void nextLevel();
     void gameOver();
     void playerName();
+    void logoScreen();
 
 public:
     Engine();

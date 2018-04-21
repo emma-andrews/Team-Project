@@ -260,6 +260,7 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     playerLives = player->getLives();
     if (player->getLives() == 0) {
         levelLost = true;
+        wait = true;
     }
 
     int x = 110;
@@ -342,12 +343,15 @@ void Engine::gameOver() {
     overText.setPosition(700, 540);
     window.draw(overText);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
-        window.close();
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
-        window.clear();
-        start();
+    while (wait) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
+            window.close();
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+            wait = false;
+            window.clear();
+            start();
+        }
     }
 }
 
@@ -368,34 +372,31 @@ void Engine::playerName() {
     nameText.setPosition(1000, 540);
 
     std::string x;
-    int count = 0;
     while (wait) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::TextEntered) {
-                if ((event.text.unicode == 127 || event.text.unicode == 8) && x.size() != 0) {
-                    x = x.substr(0, count - 1);
-                    count--;
-                    std::ostringstream s;
-                    s << x;
-                    nameText.setString(s.str());
-                    window.draw(nameText);
-                    window.display();
+                if (event.text.unicode == '\b') {
+                    x.erase(x.size() - 1, 1);
+                    nameText.setString(x);
                 }
-                else if (event.text.unicode < 128 && event.text.unicode != 127 && event.text.unicode != 8) {
-                    x.push_back((char) event.text.unicode);
-                    count++;
-                    std::ostringstream s;
-                    s << x;
-                    nameText.setString(s.str());
-                    window.draw(nameText);
-                    window.display();
-
+                else if (event.text.unicode != '\n' || event.text.unicode != '\r'){
+                    x += static_cast<char>(event.text.unicode);
+                    if (event.text.unicode < 128 && x.size() < 8) {
+                        nameText.setString(x);
+                    }
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
                     wait = false;
                     window.clear();
                 }
+                window.draw(overText);
+                window.draw(nameText);
+                window.display();
             }
         }
     }
+}
+
+void Engine::logoScreen() {
+
 }

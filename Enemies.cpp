@@ -8,10 +8,6 @@
 const float maxY = 2.5f;
 const float gravity = 30.0f;
 
-// Monster box
-
-sf::IntRect batRect(0, 0, 50, 30);
-
 // Default constructor for monsters
 Enemies::Enemies() {
     // Give enemies a variable speed, with 25 to 50
@@ -22,12 +18,14 @@ Enemies::Enemies() {
     ilFrame = 0;
     jFrame = 0;
     killed = false;
+    sf::IntRect batRect(0, 0, 50, 30);
     sf::IntRect slimeRect(0,0,30,27);
+    sf::IntRect slime2Rect(0, 0, 30, 32);
     int chance;
-    chance = rand() % 2 + 1;
+    chance = rand() % 3 + 1;
     std::cout << chance;
     if (chance == 1) {
-        if(!sTexture.loadFromFile("slimesheet.png")){
+        if(!sTexture.loadFromFile("slime sheet.png")){
             std::cout<<"Could not load from file"<<std::endl;
         }
         eSprite.setTextureRect(slimeRect);
@@ -35,6 +33,7 @@ Enemies::Enemies() {
         eSprite.setScale(2,2);
         slime = true;
         bat = false;
+        slime2 = false;
     }
     else if (chance == 2) {
         bTexture.loadFromFile("bat sheet.png");
@@ -43,6 +42,16 @@ Enemies::Enemies() {
         eSprite.setScale(2,2);
         bat = true;
         slime = false;
+        slime2 = false;
+    }
+    else if (chance == 3) {
+        ssTexture.loadFromFile("slime 2 sheet.png");
+        eSprite.setTexture(ssTexture);
+        eSprite.setTextureRect(slime2Rect);
+        eSprite.setScale(2,2);
+        slime2 = true;
+        slime = false;
+        bat = false;
     }
 }
 
@@ -135,6 +144,15 @@ void Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangl
         lFrame++;
         if (lFrame >= eAniRect.size() - 1) {
             lFrame = 0;
+        }
+        eAniClock.restart();
+    }
+    else if (slime2 && eAniClock.getElapsedTime().asSeconds() > 0.3f) {
+        eAniRect = monAnim.slime2();
+        eSprite.setTextureRect(eAniRect[ilFrame]);
+        ilFrame++;
+        if (ilFrame >= eAniRect.size() - 1) {
+            ilFrame = 0;
         }
         eAniClock.restart();
     }
