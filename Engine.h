@@ -38,6 +38,8 @@ private:
     Chest chest;
     Enemies enemies[5];
 
+    bool wait;
+    bool kill;
     bool levelFinished;
     bool levelLost;
     bool flash;
@@ -53,6 +55,7 @@ private:
     void draw();
     void nextLevel();
     void gameOver();
+    void playerName();
 
 public:
     Engine();

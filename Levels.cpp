@@ -14,6 +14,9 @@ Levels::Levels() {
     finishPlat.setTexture(lTexture);
     staticStair.setTexture(lTexture);
 
+    enemyPosition.x = 200;
+    enemyPosition.y = 25;
+
     ssPosition.x = 100;
     ssPosition.y = 25;
 
@@ -42,6 +45,7 @@ Levels::Levels() {
     finishPlat.setSize(fPosition);
     ceiling.setSize(cPosition);
     staticStair.setSize(ssPosition);
+    enemyDead.setSize(enemyPosition);
 
     ssPosition.x = 270;
     ssPosition.y = 875;
@@ -52,21 +56,24 @@ Levels::Levels() {
     gPosition.y = 1070;
     cPosition.x = 0;
     cPosition.y = 0;
+    enemyPosition.x = 2100;
+    enemyPosition.y = 1500;
 
     ground.setPosition(gPosition);
     ceiling.setPosition(cPosition);
     finishPlat.setPosition(fPosition);
     staticStair.setPosition(ssPosition);
+    enemyDead.setPosition(enemyPosition);
 
     platforms.push_back(ground);
     //platforms.push_back(ceiling);
     platforms.push_back(finishPlat);
-    platforms.push_back(staticStair);
 
     ssPosition.x = 1825;
     ssPosition.y = 375;
     staticStair.setPosition(ssPosition);
     platforms.push_back(staticStair);
+    platforms.push_back(enemyDead);
 }
 
 int Levels::checkCollision(sf::Sprite player) {
@@ -111,11 +118,11 @@ void Levels::generatePlat() {
     size.x = 100;
     size.y = 25;
     sf::Vector2f eSize;
-    for (int i = 0; i < 13; i++) {
+    for (int i = 0; i < 17; i++) {
         sf::RectangleShape plat;
         plat.setSize(size);
         plat.setFillColor(sf::Color(107, 19, 66));
-        //plat.setTexture(lTexture);
+        plat.setTexture(lTexture);
         sf::Vector2f position;
         if (!secondloop) {
             x += 150;

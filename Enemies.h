@@ -10,7 +10,8 @@ private:
     sf::Vector2f ePosition;
     sf::Vector2f eVelocity;
     sf::Sprite eSprite;
-    sf::Texture eTexture;
+    sf::Texture sTexture;
+    sf::Texture bTexture;
     std::vector<sf::IntRect> eAniRect;
 
     Animation monAnim;
@@ -23,12 +24,18 @@ private:
     int jFrame;
     int home;
     int startDir;
+    bool slime;
+    bool bat;
+    bool kill;
+
 
 public:
     sf::Clock eAniClock;
     sf::Time tp;
-    Enemies();
+    bool killed;
 
+    Enemies();
+    std::vector<Enemies> enemyVect;
     sf::Sprite getSprite();
     int checkCollision(sf::Sprite player);
     void moveLeft(float elapsedTime);
@@ -40,7 +47,8 @@ public:
     void generateHome(int homes[]);
     void update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats);
     void spawn(std::vector<sf::RectangleShape> plats);
-    void checkKill (sf::Sprite player);
+    bool checkKill (sf::Sprite player);
+    void setDead(sf::RectangleShape plat);
 };
 
 #endif //TEAMPROJECT_ENEMIES_H

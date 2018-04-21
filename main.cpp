@@ -22,7 +22,8 @@ Please remember to push early and often! We do not want any lost work (if you wa
  animate FINISH to look like a sign in background
  add sounds
  ~~~error catching if engine, files failed to load
- ask for player name at beginning*/
+ ask for player name at beginning
+ story!!!!*/
 
 int main() {
     Engine engine;//creates engine and starts it

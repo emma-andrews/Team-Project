@@ -15,10 +15,12 @@ private:
     sf::Vector2f tempPosition;
     sf::RectangleShape staticStair;
     sf::Vector2f ssPosition;
+    sf::Vector2f enemyPosition;
 
     sf::RectangleShape plat1;
     sf::RectangleShape ground;
     sf::RectangleShape finishPlat;
+    sf::RectangleShape enemyDead;
 
     bool validPosition;
     std::vector<sf::RectangleShape> temp;

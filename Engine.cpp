@@ -7,6 +7,7 @@ Engine::Engine() {
     score = 0;
     startup = true;
     flash = false;
+    wait = false;
     //alreadyOpen = false;
 
     player = new Player();
@@ -88,11 +89,11 @@ Engine::Engine() {
 }
 
 void Engine::start() {//starts the game
-//    if (startup) {
-//        window.clear(sf::Color::Black);
-//        window.draw(startText);
-//        window.display();
-//    }
+    if (startup) {
+        wait = true;
+        playerName();
+        startup = false;
+    }
     sf::Clock clock;
     sf::Clock gameClock;
 
@@ -103,6 +104,7 @@ void Engine::start() {//starts the game
     levelLost = false;
     coin.coins.clear();
     lGameTime = 0;
+    enemies->killed = false;
 
     chest.resetSprite();
     level.generatePlat();//generates the random platforms of the level
@@ -121,7 +123,7 @@ void Engine::start() {//starts the game
     int numbers[5];
     // Home generation
     enemies->generateHome(numbers);
-    for (int i = 0; i < 5; i++) {
+    for (unsigned i = 0; i < 5; i++) {
         enemies[i].setHome(numbers[i]);
         enemies[i].spawn(level.platforms);
     }
@@ -204,6 +206,7 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
 void Engine::update(float dtAsSeconds, float totalTime) {
     int col = level.checkCollision(player->getSprite());
     player->update(dtAsSeconds, col, level.platforms);
+
     for (unsigned i = 0; i < coin.coins.size(); i++) {
         if (player->getSprite().getGlobalBounds().intersects(coin.coins[i].getSprite().getGlobalBounds())) {
             coin.coins.erase(coin.coins.begin() + i);
@@ -225,12 +228,16 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         coin.coins[i].update();
     }
     chest.update();
-
+    int collision;
     // Update the enemies status
-    for (int i = 0; i < 5; i++) {
+    for (unsigned i = 0; i < 5; i++) {
         enemies[i].update(player, dtAsSeconds, level.platforms);
-        if (player->getSprite().getGlobalBounds().intersects(enemies[i].getSprite().getGlobalBounds())) {
+        collision = enemies[i].checkCollision(player->getSprite());
+        if (collision == 1) {
             player->setLives(player->getLives() - 1);
+        }
+        else if (collision == 2) {
+            score += 150;
         }
     }
     if (player->getLives() == 0) {
@@ -341,5 +348,54 @@ void Engine::gameOver() {
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
         window.clear();
         start();
+    }
+}
+
+void Engine::playerName() {
+    window.clear(sf::Color::Black);
+    sf::Text overText;
+    overText.setFont(font);
+    overText.setFillColor(sf::Color::Green);
+    overText.setString("ENTER NAME: ");
+    overText.setCharacterSize(40);
+    overText.setPosition(700, 540);
+    window.draw(overText);
+    window.display();
+    sf::Text nameText;
+    nameText.setFont(font);
+    nameText.setFillColor(sf::Color::Green);
+    nameText.setCharacterSize(40);
+    nameText.setPosition(1000, 540);
+
+    std::string x;
+    int count = 0;
+    while (wait) {
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::TextEntered) {
+                if ((event.text.unicode == 127 || event.text.unicode == 8) && x.size() != 0) {
+                    x = x.substr(0, count - 1);
+                    count--;
+                    std::ostringstream s;
+                    s << x;
+                    nameText.setString(s.str());
+                    window.draw(nameText);
+                    window.display();
+                }
+                else if (event.text.unicode < 128 && event.text.unicode != 127 && event.text.unicode != 8) {
+                    x.push_back((char) event.text.unicode);
+                    count++;
+                    std::ostringstream s;
+                    s << x;
+                    nameText.setString(s.str());
+                    window.draw(nameText);
+                    window.display();
+
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                    wait = false;
+                    window.clear();
+                }
+            }
+        }
     }
 }

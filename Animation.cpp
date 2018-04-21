@@ -102,16 +102,11 @@ std::vector<sf::IntRect> Animation::chestOpen() {//animation for chest opening
 }
 
 std::vector<sf::IntRect> Animation::batFly() {
-    bool first = true;
-    bool forty = false;
     std::vector<sf::IntRect> vect;
-    sf::IntRect flySource(0, 0, 44, 28);
-    while (flySource.left <= 280) {
+    sf::IntRect flySource(0, 0, 50, 30);
+    while (flySource.left <= 250) {
         vect.push_back(flySource);
-        if (first) {
-            flySource.left += 50;
-            first = false;
-        }
+        flySource.left += 50;
     }
     return vect;
 }

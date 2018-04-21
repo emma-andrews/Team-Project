@@ -9,7 +9,8 @@ const float maxY = 2.5f;
 const float gravity = 30.0f;
 
 // Monster box
-sf::IntRect monsterRect(0,0,30,27);
+
+sf::IntRect batRect(0, 0, 50, 30);
 
 // Default constructor for monsters
 Enemies::Enemies() {
@@ -20,11 +21,29 @@ Enemies::Enemies() {
     irFrame = 0;
     ilFrame = 0;
     jFrame = 0;
-
-    eTexture.loadFromFile("slime sheet.png");
-    eSprite.setTexture(eTexture);
-    eSprite.setTextureRect(monsterRect);
-    eSprite.setScale(2,2);
+    killed = false;
+    sf::IntRect slimeRect(0,0,30,27);
+    int chance;
+    chance = rand() % 2 + 1;
+    std::cout << chance;
+    if (chance == 1) {
+        if(!sTexture.loadFromFile("slimesheet.png")){
+            std::cout<<"Could not load from file"<<std::endl;
+        }
+        eSprite.setTextureRect(slimeRect);
+        eSprite.setTexture(sTexture);
+        eSprite.setScale(2,2);
+        slime = true;
+        bat = false;
+    }
+    else if (chance == 2) {
+        bTexture.loadFromFile("bat sheet.png");
+        eSprite.setTexture(bTexture);
+        eSprite.setTextureRect(batRect);
+        eSprite.setScale(2,2);
+        bat = true;
+        slime = false;
+    }
 }
 
 sf::Sprite Enemies::getSprite() {
@@ -54,7 +73,14 @@ void Enemies::setHome(int home) {
 }
 
 int Enemies::checkCollision(sf::Sprite player) {
-    if (eSprite.getGlobalBounds().intersects(player.getGlobalBounds())) {
+    float ydifference;
+    float xdifference;
+    ydifference = eSprite.getGlobalBounds().top - (player.getGlobalBounds().top + player.getGlobalBounds().height);
+    xdifference = (eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width) - (player.getGlobalBounds().left + player.getGlobalBounds().width);
+    if (ydifference <= 10 && ydifference >= -10 && xdifference <= 20 && xdifference >= -20) {
+        return 2;
+    }
+    else if (eSprite.getGlobalBounds().intersects(player.getGlobalBounds())) {
         return 1;
     }
     else {
@@ -64,28 +90,37 @@ int Enemies::checkCollision(sf::Sprite player) {
 
 void Enemies::update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats) {
     // Behavior decision
+    engage(elapsedTime, player->getSprite());
     int collision = checkCollision((*player).getSprite());
     int pX = (*player).getX();
     int pY = (*player).getY();
-    if (abs(pX - (int) ePosition.x) < 100) {
-        if (abs(pY - (int) ePosition.y) < 100) {
-            startDir = pX - ePosition.x < 0 ? 0 : 1;
-            patrol(plats, elapsedTime);
-        }
-        else {
+    if (!killed) {
+        if (abs(pX - (int) ePosition.x) < 100) {
+            if (abs(pY - (int) ePosition.y) < 100) {
+                startDir = pX - ePosition.x < 0 ? 0 : 1;
+                patrol(plats, elapsedTime);
+            } else {
+                patrol(plats, elapsedTime);
+            }
+        } else {
             patrol(plats, elapsedTime);
         }
     }
-    else {
-        patrol(plats, elapsedTime);
-    }
+
     // Position Verification to prevent weird bug on new level
-    if (ePosition.x < plats[home].getPosition().x - 20) {
+    if (collision == 2) {
+        ePosition.x = 2100;
+        ePosition.y = 1500;
+        eSprite.setPosition(ePosition);
+        killed = true;
+    }
+    else if (ePosition.x < plats[home].getPosition().x - 20 && !killed) {
         spawn(plats);
-    } else if (ePosition.x > plats[home].getPosition().x + plats[home].getGlobalBounds().width + 20 - eSprite.getGlobalBounds().width) {
+    } else if (ePosition.x > plats[home].getPosition().x + plats[home].getGlobalBounds().width + 20 - eSprite.getGlobalBounds().width && !killed) {
         spawn(plats);
     }
-    if (eAniClock.getElapsedTime().asSeconds() > 0.3f) {
+
+    if (slime && eAniClock.getElapsedTime().asSeconds() > 0.3f) {
         eAniRect = monAnim.slime();
         eSprite.setTextureRect(eAniRect[rFrame]);
         rFrame++;
@@ -94,9 +129,20 @@ void Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangl
         }
         eAniClock.restart();
     }
+    else if (bat && eAniClock.getElapsedTime().asSeconds() > 0.3f) {
+        eAniRect = monAnim.batFly();
+        eSprite.setTextureRect(eAniRect[lFrame]);
+        lFrame++;
+        if (lFrame >= eAniRect.size() - 1) {
+            lFrame = 0;
+        }
+        eAniClock.restart();
+    }
     // Update the sprites location
-    engage(elapsedTime, player->getSprite());
-    eSprite.setPosition(ePosition);
+
+    if (!killed) {
+        eSprite.setPosition(ePosition);
+    }
 }
 
 // Generates homes for the monsters, checking for duplicates to prevent two on one platform
@@ -107,24 +153,25 @@ void Enemies::generateHome(int homes[]) {
     int newHome;
     duplicate = false;
     for (int i = 0; i < 5; i++) {
-        do {
-            // Generate a new home
-            homes[i] = (rand() % 17) + 1;
-            // Don't allow enemies to spawn on the finish platform
-            if (homes[i] == 1) {
-                homes[i]++;
-            }
-
-            // Check from back for duplication
-            for (int j = i - 1; j > -1; j--) {
-                if (homes[i] == homes[j]) {
-                    duplicate = true;
-                    break;
-                } else {
-                    duplicate = false;
-                }
-            }
-        } while (duplicate);
+//        do {
+//            // Generate a new home
+//            homes[i] = (rand() % 17) + 1;
+//            // Don't allow enemies to spawn on the finish platform
+//            if (homes[i] == 1) {
+//                homes[i]++;
+//            }
+//
+//            // Check from back for duplication
+//            for (int j = i - 1; j > -1; j--) {
+//                if (homes[i] == homes[j]) {
+//                    duplicate = true;
+//                    break;
+//                } else {
+//                    duplicate = false;
+//                }
+//            }
+//        } while (duplicate);
+        homes[i] = 25 - i;
     }
 
 }
@@ -179,9 +226,19 @@ void Enemies::moveRight(float elapsedTime) {
     ePosition.x += eSpeed * elapsedTime;
 }
 
-void Enemies::checkKill(sf::Sprite player) {
-    float difference = eSprite.getGlobalBounds().top - (player.getGlobalBounds().top + player.getGlobalBounds().height);
-    if (difference == 0) {
+bool Enemies::checkKill(sf::Sprite player) {
+    if (eSprite.getGlobalBounds().top == (player.getGlobalBounds().top + player.getGlobalBounds().height)) {
         //delete the enemy
+        return true;
     }
+    else {
+        return false;
+    }
+}
+
+void Enemies::setDead(sf::RectangleShape plat) {
+    sf::Vector2f position;
+    position.x = plat.getGlobalBounds().left;
+    position.y = plat.getGlobalBounds().top;
+    eSprite.setPosition(position);
 }
