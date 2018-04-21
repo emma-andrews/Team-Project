@@ -1,6 +1,7 @@
 #ifndef TEAMPROJECT_PLAYER_H
 #define TEAMPROJECT_PLAYER_H
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include "Levels.h"
 #include "Animation.h"
@@ -12,6 +13,8 @@ private:
     sf::Sprite pSprite;
     sf::Texture pTexture;
     std::vector<sf::IntRect> aniRect;
+    sf::SoundBuffer jumpBuffer;
+    sf::SoundBuffer chestBuffer;
 
     Animation animation;
 
@@ -20,8 +23,6 @@ private:
     bool pJump;
     bool canJump;
     bool platJump;
-    bool rightLast;
-    bool leftLast;
 
     float pSpeed;
     int lives;
@@ -36,6 +37,10 @@ private:
 public:
     sf::Clock aniClock;
     sf::Time da;
+    sf::Sound jumpSound;
+    sf::Sound chestSound;
+    bool rightLast;
+    bool leftLast;
 
     Player();
     //void setSprite(sf::IntRect aniRect);

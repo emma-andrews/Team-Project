@@ -81,6 +81,26 @@ std::vector<sf::IntRect> Animation::playerLJump() {
     return vect;
 }
 
+std::vector<sf::IntRect> Animation::playerRHurt() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect runSource(0, 200, 34, 40);
+    while (runSource.left <= 34) {
+        vect.push_back(runSource);
+        runSource.left += 35;
+    }
+    return vect;
+}
+
+std::vector<sf::IntRect> Animation::playerLHurt() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect runSource(40, 200, 34, 40);
+    while (runSource.left <= 34) {
+        vect.push_back(runSource);
+        runSource.left += 35;
+    }
+    return vect;
+}
+
 std::vector<sf::IntRect> Animation::coinTurn() {
     std::vector<sf::IntRect> vect;
     sf::IntRect turnSource(0, 0, 16, 16);

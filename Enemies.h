@@ -47,7 +47,7 @@ public:
     void patrol(std::vector<sf::RectangleShape> plats, float elapsedTime);
     void setHome(int home);
     void generateHome(int homes[]);
-    void update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats);
+    int update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats);
     void spawn(std::vector<sf::RectangleShape> plats);
     bool checkKill (sf::Sprite player);
     void setDead(sf::RectangleShape plat);

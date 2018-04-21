@@ -23,7 +23,7 @@ Enemies::Enemies() {
     sf::IntRect slime2Rect(0, 0, 30, 32);
     int chance;
     chance = rand() % 3 + 1;
-    std::cout << chance;
+    //std::cout << chance;
     if (chance == 1) {
         if(!sTexture.loadFromFile("slime sheet.png")){
             std::cout<<"Could not load from file"<<std::endl;
@@ -86,20 +86,31 @@ int Enemies::checkCollision(sf::Sprite player) {
     float xdifference;
     ydifference = eSprite.getGlobalBounds().top - (player.getGlobalBounds().top + player.getGlobalBounds().height);
     xdifference = (eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width) - (player.getGlobalBounds().left + player.getGlobalBounds().width);
-    if (ydifference <= 10 && ydifference >= -10 && xdifference <= 20 && xdifference >= -20) {
-        return 2;
-    }
-    else if (eSprite.getGlobalBounds().intersects(player.getGlobalBounds())) {
+    bool collideLeft = (player.getGlobalBounds().top + player.getGlobalBounds().height) > eSprite.getGlobalBounds().top &&
+                       (player.getGlobalBounds().left + player.getGlobalBounds().width) > eSprite.getGlobalBounds().left &&
+                       (player.getGlobalBounds().left + player.getGlobalBounds().width) < eSprite.getGlobalBounds().left + 10;
+    bool collideRight = (player.getGlobalBounds().top + player.getGlobalBounds().height) > eSprite.getGlobalBounds().top &&
+                        (player.getGlobalBounds().left) < eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width &&
+                        (player.getGlobalBounds().left) > eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width - 10;
+    if (collideLeft || collideRight) {
         return 1;
     }
+    else if (ydifference <= 10 && ydifference >= -10 && xdifference <= 20 && xdifference >= -20) {
+        return 2;
+    }
+
     else {
         return 0;
     }
 }
-
-void Enemies::update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats) {
+int x = 2100;
+int y = 1500;
+int Enemies::update(Player *player, float elapsedTime, std::vector<sf::RectangleShape> plats) {
     // Behavior decision
-    engage(elapsedTime, player->getSprite());
+
+    if (!killed) {
+        engage(elapsedTime, player->getSprite());
+    }
     int collision = checkCollision((*player).getSprite());
     int pX = (*player).getX();
     int pY = (*player).getY();
@@ -118,9 +129,11 @@ void Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangl
 
     // Position Verification to prevent weird bug on new level
     if (collision == 2) {
-        ePosition.x = 2100;
-        ePosition.y = 1500;
+        ePosition.x = x;
+        ePosition.y = y;
         eSprite.setPosition(ePosition);
+        x += 100;
+        y += 100;
         killed = true;
     }
     else if (ePosition.x < plats[home].getPosition().x - 20 && !killed) {

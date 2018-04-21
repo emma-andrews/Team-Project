@@ -15,6 +15,8 @@ public:
     std::vector<sf::IntRect> playerLRun();
     std::vector<sf::IntRect> playerRJump();
     std::vector<sf::IntRect> playerLJump();
+    std::vector<sf::IntRect> playerRHurt();
+    std::vector<sf::IntRect> playerLHurt();
     std::vector<sf::IntRect> coinTurn();
     std::vector<sf::IntRect> chestOpen();
     std::vector<sf::IntRect> batFly();

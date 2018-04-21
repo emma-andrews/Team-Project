@@ -14,6 +14,9 @@ Levels::Levels() {
     finishPlat.setTexture(lTexture);
     staticStair.setTexture(lTexture);
 
+    texture1.loadFromFile("platform1.png");
+    lTexture1 = &texture1;
+
     enemyPosition.x = 200;
     enemyPosition.y = 25;
 
@@ -145,13 +148,14 @@ void Levels::generatePlat() {
     }
 
     int ex = 0;
-    eSize.x = 150;
+    eSize.x = 160;
     eSize.y = 25;
     for (int i = 0; i < 5; i++) {
         sf::RectangleShape enemyplat;
         sf::Vector2f position;
         enemyplat.setFillColor(sf::Color(107, 19, 66));
         enemyplat.setSize(eSize);
+        enemyplat.setTexture(lTexture1);
         ex += 175;
         if (ex >= 1725) {
             ex = 200;
@@ -173,8 +177,8 @@ void Levels::generatePlat() {
             bool tooClose;
 
             intersect = platforms[i].getGlobalBounds().intersects(platforms[j].getGlobalBounds());
-            tooClose = (xDifference > -110 && xDifference < 110) && (yDifference > -75 && yDifference < 75);
-            if (i != j && (intersect || tooClose)) {
+            tooClose = (xDifference > -110 && xDifference < 110) && (yDifference > -90 && yDifference < 90);
+            if (i != j && (intersect || tooClose) && i != 1) {//cannot move the finish platform, will move those around it
                 tempPosition.x = platforms[i].getGlobalBounds().left;
                 tempPosition.y = rand() % 800 + 140;
                 platforms[i].setPosition(tempPosition);

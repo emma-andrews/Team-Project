@@ -2,6 +2,7 @@
 #define TEAMPROJECT_ENGINE_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Player.h"
 #include "Levels.h"
 #include "Coin.h"
@@ -18,6 +19,9 @@ private:
     sf::Sprite lSprite;
     sf::Texture lTexture;
     sf::Vector2f lPosition;
+    sf::SoundBuffer coinBuffer;
+    sf::Sound coinSound;
+    sf::Music music;
 
     sf::Text levelText;
     sf::Text livesText;
@@ -37,6 +41,7 @@ private:
     Coin coin;
     Chest chest;
     Enemies enemies[5];
+    Animation animation;
 
     bool wait;
     bool kill;
@@ -56,7 +61,6 @@ private:
     void nextLevel();
     void gameOver();
     void playerName();
-    void logoScreen();
 
 public:
     Engine();

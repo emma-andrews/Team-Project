@@ -16,6 +16,11 @@ Engine::Engine() {
     lSprite.setTexture(lTexture);
     lSprite.setScale(4,4);
 
+    coinBuffer.loadFromFile("coin_sound.wav");
+    music.openFromFile("Main Theme.wav");
+    music.setLoop(true);
+    music.play();
+
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
     resolution.y = sf::VideoMode::getDesktopMode().height;
@@ -104,7 +109,7 @@ void Engine::start() {//starts the game
     levelLost = false;
     coin.coins.clear();
     lGameTime = 0;
-    enemies->killed = false;
+    wait = false;
 
     chest.resetSprite();
     level.generatePlat();//generates the random platforms of the level
@@ -147,6 +152,9 @@ void Engine::start() {//starts the game
 void Engine::nextLevel() {
     //set up for next level with message saying level complete, etc.
     player->setPosition();
+    for (int i = 0; i < 5; i++) {
+        enemies[i].killed = false;
+    }
     start();
 }
 bool open = true;
@@ -211,12 +219,18 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         if (player->getSprite().getGlobalBounds().intersects(coin.coins[i].getSprite().getGlobalBounds())) {
             coin.coins.erase(coin.coins.begin() + i);
             player->setScore(100);
+            // make a coin sound
+            coinSound.setBuffer(coinBuffer);
+            coinSound.setVolume(7.5f);
+            coinSound.play();
         }
     }
     if (coin.coins.empty()) {
         exitOpen = true;
     }
+
     levelFinished = level.checkFinished(player->getSprite()) && coin.coins.size() == 0;
+
     if (!alreadyOpen) {
         chestOpen = player->checkInteraction(chest.getChestSprite());
     }
@@ -229,12 +243,22 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     }
     chest.update();
     int collision;
+    std::vector<sf::IntRect> rect;
     // Update the enemies status
     for (unsigned i = 0; i < 5; i++) {
-        enemies[i].update(player, dtAsSeconds, level.platforms);
-        collision = enemies[i].checkCollision(player->getSprite());
+        collision = enemies[i].update(player, dtAsSeconds, level.platforms);
         if (collision == 1) {
             player->setLives(player->getLives() - 1);
+            if (player->rightLast && player->aniClock.getElapsedTime().asSeconds() > 0.1f) {
+                rect = animation.playerRHurt();
+                player->getSprite().setTextureRect(rect[0]);
+                player->aniClock.restart();
+            }
+            else if (player->leftLast && player->aniClock.getElapsedTime().asSeconds() > 0.1f) {
+                rect = animation.playerLHurt();
+                player->getSprite().setTextureRect(rect[0]);
+                player->aniClock.restart();
+            }
         }
         else if (collision == 2) {
             score += 150;
@@ -258,6 +282,7 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     remainText.setString(s3.str());
 
     playerLives = player->getLives();
+    std::cout << playerLives;
     if (player->getLives() == 0) {
         levelLost = true;
         wait = true;
@@ -287,41 +312,43 @@ void Engine::update(float dtAsSeconds, float totalTime) {
 }
 
 void Engine::draw() {//draws everything to the screen, called every frame in update
-    window.clear(sf::Color::White);//clears the window if anything is on it
-    window.draw(backgroundSprite);//draws the background
-    window.draw(player->getSprite());//the player sprite
-    //window.draw(coin.getSprite());//the coin sprite
-    window.draw(chest.getChestSprite());
+    if (!wait) {
+        window.clear(sf::Color::White);//clears the window if anything is on it
+        window.draw(backgroundSprite);//draws the background
+        window.draw(player->getSprite());//the player sprite
+        //window.draw(coin.getSprite());//the coin sprite
+        window.draw(chest.getChestSprite());
 
-    for (unsigned i = 0; i < level.platforms.size(); i++) {
-        window.draw(level.platforms[i]);//each individual platform that was generated
+        for (unsigned i = 0; i < level.platforms.size(); i++) {
+            window.draw(level.platforms[i]);//each individual platform that was generated
+        }
+        //draw hearts here like above for platforms
+        for (unsigned i = 0; i < pHearts.size(); i++) {
+            window.draw(pHearts[i]);
+        }
+        for (unsigned i = 0; i < coin.coins.size(); i++) {
+            window.draw(coin.coins[i].getSprite());
+        }
+        for (unsigned i = 0; i < 5; i++) {
+            window.draw(enemies[i].getSprite());
+        }
+        window.draw(levelText);//draws all the texts
+        window.draw(livesText);
+        window.draw(scoreText);
+        window.draw(endplatText);
+        window.draw(timeText);
+        window.draw(remainText);
+        if (exitOpen) {
+            window.draw(openText);
+        }
+        if (!open) {//if the user enters esc to exit the game
+            window.draw(closeText);
+        }
+        if (stuck) {
+            window.draw(stuckText);
+        }
+        window.display();//displays everything that was drawn to the screen
     }
-    //draw hearts here like above for platforms
-    for (unsigned i = 0; i < pHearts.size(); i++) {
-        window.draw(pHearts[i]);
-    }
-    for (unsigned i = 0; i < coin.coins.size(); i++) {
-        window.draw(coin.coins[i].getSprite());
-    }
-    for (unsigned i = 0; i < 5; i++) {
-        window.draw(enemies[i].getSprite());
-    }
-    window.draw(levelText);//draws all the texts
-    window.draw(livesText);
-    window.draw(scoreText);
-    window.draw(endplatText);
-    window.draw(timeText);
-    window.draw(remainText);
-    if (exitOpen) {
-        window.draw(openText);
-    }
-    if(!open){//if the user enters esc to exit the game
-        window.draw(closeText);
-    }
-    if (stuck) {
-        window.draw(stuckText);
-    }
-    window.display();//displays everything that was drawn to the screen
 
     if (levelFinished) {
         window.draw(finishText);
@@ -330,6 +357,7 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
         window.clear();
         level.popPlat();
         nextLevel();
+
     }
 }
 
@@ -356,47 +384,75 @@ void Engine::gameOver() {
 }
 
 void Engine::playerName() {
-    window.clear(sf::Color::Black);
+    sf::Text logoText;
+    sf::Text tagText;
     sf::Text overText;
+    sf::Text controlText;
+    sf::Text nameText;
+    sf::Font font1;
+
+    window.clear(sf::Color::Black);
+
     overText.setFont(font);
     overText.setFillColor(sf::Color::Green);
     overText.setString("ENTER NAME: ");
     overText.setCharacterSize(40);
-    overText.setPosition(700, 540);
+    overText.setPosition(600, 540);
+
+    font1.loadFromFile("Demonized.ttf");
+    logoText.setFont(font1);
+    logoText.setCharacterSize(100);
+    logoText.setString("RENEGADE");
+    logoText.setFillColor(sf::Color::Red);
+    logoText.setPosition(525, 305);
+
+    tagText.setFont(font1);
+    tagText.setCharacterSize(40);
+    tagText.setString("Take back your glory \nand save the planet");
+    tagText.setFillColor(sf::Color::Red);
+    tagText.setPosition(530, 425);
+
+    controlText.setFont(font);
+    controlText.setFillColor(sf::Color::White);
+    controlText.setCharacterSize(30);
+    controlText.setString("CONTROLS:\n[A]: Move left\n[D]: Move right\n[Space]: Jump\n[Backspace]: Restart Level\n[Escape]: Exit Game");
+    controlText.setPosition(30, 30);
+
+    window.draw(logoText);
+    window.draw(tagText);
+    window.draw(controlText);
     window.draw(overText);
     window.display();
-    sf::Text nameText;
+
     nameText.setFont(font);
     nameText.setFillColor(sf::Color::Green);
     nameText.setCharacterSize(40);
-    nameText.setPosition(1000, 540);
+    nameText.setPosition(850, 540);
 
     std::string x;
     while (wait) {
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::TextEntered) {
+            if (event.type == sf::Event::TextEntered && event.text.unicode != 32) {
                 if (event.text.unicode == '\b') {
                     x.erase(x.size() - 1, 1);
                     nameText.setString(x);
                 }
-                else if (event.text.unicode != '\n' || event.text.unicode != '\r'){
-                    x += static_cast<char>(event.text.unicode);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                    wait = false;
+                    window.clear();
+                }
+                else {
+                    x += (char)(event.text.unicode);
                     if (event.text.unicode < 128 && x.size() < 8) {
                         nameText.setString(x);
                     }
                 }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-                    wait = false;
-                    window.clear();
-                }
+
+                window.draw(logoText);
                 window.draw(overText);
                 window.draw(nameText);
                 window.display();
             }
         }
     }
-}
-
-void Engine::logoScreen() {
-
 }

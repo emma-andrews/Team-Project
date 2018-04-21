@@ -8,12 +8,14 @@ class Levels {
 private:
     sf::Sprite lSprite;
     const sf::Texture *lTexture;
+    const sf::Texture *lTexture1;
     sf::Texture texture;
+    sf::Texture texture1;
+
     sf::Vector2f tposition;
     sf::Vector2f gPosition;
     sf::Vector2f fPosition;
     sf::Vector2f tempPosition;
-    sf::RectangleShape staticStair;
     sf::Vector2f ssPosition;
     sf::Vector2f enemyPosition;
 
@@ -21,9 +23,9 @@ private:
     sf::RectangleShape ground;
     sf::RectangleShape finishPlat;
     sf::RectangleShape enemyDead;
+    sf::RectangleShape staticStair;
 
     bool validPosition;
-    std::vector<sf::RectangleShape> temp;
 
 public:
     int levelNum;
