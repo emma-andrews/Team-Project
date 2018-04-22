@@ -8,9 +8,11 @@
 #include "Coin.h"
 #include "Chest.h"
 #include "Enemies.h"
+#include "Potion.h"
 
 class Engine {
 private:
+    sf::Clock invulnerableTimer;
     sf::RenderWindow window;
     sf::Sprite backgroundSprite;
     sf::Texture backgroundTexture;
@@ -46,8 +48,10 @@ private:
     Chest chest;
     Enemies enemies[5];
     Animation animation;
+    Potion potion;
 
     bool wait;
+    bool isInvulnerable;
     bool kill;
     bool levelFinished;
     bool levelLost;

@@ -22,6 +22,7 @@ public:
     std::vector<sf::IntRect> batFly();
     std::vector<sf::IntRect> slime();
     std::vector<sf::IntRect> slime2();
+    std::vector<sf::IntRect> potion();
 };
 
 #endif //TEAMPROJECT_ANIMATION_H

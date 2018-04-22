@@ -23,7 +23,7 @@ Enemies::Enemies() {
     sf::IntRect slime2Rect(0, 0, 30, 32);
     int chance;
     chance = rand() % 3 + 1;
-    std::cout << chance;
+
     if (chance == 1) {
         if(!sTexture.loadFromFile("slime sheet.png")){
             std::cout<<"Could not load from file"<<std::endl;

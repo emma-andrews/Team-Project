@@ -245,7 +245,7 @@ int Player::getY() {
 
 void Player::bounceBack(int direction) {
     if (direction == 1) {//moving right when collided
-        pPosition.x -= pSpeed * 0.25f;
+        pPosition.x -= pSpeed * 0.15f;
         if (aniClock.getElapsedTime().asSeconds() > 0.1f) {
             aniRect = animation.playerRHurt();
             pSprite.setTextureRect(aniRect[0]);
@@ -253,7 +253,7 @@ void Player::bounceBack(int direction) {
         }
     }
     else if (direction == 2) {//moving left when collided
-        pPosition.x += pSpeed * 0.25f;
+        pPosition.x += pSpeed * 0.15f;
         if (aniClock.getElapsedTime().asSeconds() > 0.1f) {
             aniRect = animation.playerLHurt();
             pSprite.setTextureRect(aniRect[0]);

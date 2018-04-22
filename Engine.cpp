@@ -260,6 +260,7 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         coin.coins[i].update();
     }
     chest.update();
+    potion.update();
     int collision = 0;
     std::vector<sf::IntRect> rect;
 
@@ -267,12 +268,23 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     for (unsigned i = 0; i < 5; i++) {
         collision = enemies[i].update(player, dtAsSeconds, level.platforms);
         if (collision == 1) {
-            player->setLives(player->getLives() - 1);
-            if(player->rightLast) {
-                player->bounceBack(1);
+            if (isInvulnerable) {
+                sf::Time timePassed = invulnerableTimer.getElapsedTime();
+                if (timePassed.asSeconds() > 1.5f) {
+                    isInvulnerable = false;
+                }
             }
-            else if (player->leftLast) {
-                player->bounceBack(2);
+            else {
+                player->setLives(player->getLives() - 1);
+                isInvulnerable = true;
+                invulnerableTimer.restart();
+                if(player->rightLast) {
+                    player->bounceBack(1);
+                }
+                else if (player->leftLast) {
+                    player->bounceBack(2);
+                }
+
             }
         }
         else if (collision == 2) {
@@ -293,13 +305,12 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     remainText.setString(s3.str());
 
     playerLives = player->getLives();
-    if (playerLives < 3) {
-        std::cout << playerLives;
-    }
+
     if (player->getLives() == 0) {
         levelLost = true;
     }
-
+    //Clear, or else it infinitely populates
+    pHearts.clear();
     int x = 110;
     for (int i = 0; i < playerLives; i++) {
         x += 40;
@@ -331,6 +342,7 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
         window.draw(player->getSprite());//the player sprite
         //window.draw(coin.getSprite());//the coin sprite
         window.draw(chest.getChestSprite());
+        window.draw(potion.getSprite());
 
         for (unsigned i = 0; i < level.platforms.size(); i++) {
             window.draw(level.platforms[i]);//each individual platform that was generated
@@ -404,9 +416,26 @@ void Engine::playerName() {
     sf::Text overText;
     sf::Text controlText;
     sf::Text nameText;
+    sf::Text story;
     sf::Font font1;
 
+    sf::Sprite playerGuy;
+    sf::Texture pTexture;
+    sf::IntRect pTemp(0,0,30,40);
+    sf::Clock clock2;
+    sf::Vector2f pPosition;
+    std::vector<sf::IntRect> pRect;
+    int frame = 0;
+
     window.clear(sf::Color::Black);
+
+    pTexture.loadFromFile("player character sheet.png");
+    playerGuy.setTexture(pTexture);
+    playerGuy.setTextureRect(pTemp);
+    pPosition.x = 450;
+    pPosition.y = 700;
+    playerGuy.setPosition(pPosition);
+    playerGuy.setScale(4,4);
 
     overText.setFont(font);
     overText.setFillColor(sf::Color::Green);
@@ -433,17 +462,42 @@ void Engine::playerName() {
     controlText.setString("CONTROLS:\n[A]: Move left\n[D]: Move right\n[Space]: Jump\n[Backspace]: Restart Level\n[Escape]: Exit Game");
     controlText.setPosition(30, 30);
 
-    window.draw(logoText);
-    window.draw(tagText);
-    window.draw(controlText);
-    window.draw(overText);
-    window.display();
+    story.setFont(font);
+    story.setString("Hundreds of years ago, the Earth was once prosperous and on the rise to universal success.\n"
+                    "Jon Bao and his group of government spies discovered a new jewel on the planet of Xorcids,\n"
+                    "which would one day be worth millions here on Earth. Xorcids was approximately four light \n"
+                    "years away from Earth, giving Jon Bao and his team a long travel to and fro. When they \n"
+                    "returned to Earth, the planet was destroyed; human life had ceased to exist and Earth's \n"
+                    "only inhabitants were slow-minded but vicious enemies. From then on, Jon Bao had only one\n"
+                    "mission and it wasn't about jewels or fame or glory. It was survival.");
+    story.setPosition(200, 150);
+    story.setFillColor(sf::Color::White);
+    story.setCharacterSize(30);
 
     nameText.setFont(font);
     nameText.setFillColor(sf::Color::Green);
     nameText.setCharacterSize(40);
     nameText.setPosition(850, 540);
 
+    sf::Clock clock1;
+    while (wait) {
+        window.draw(story);
+        window.draw(playerGuy);
+        window.display();
+        if (clock1.getElapsedTime().asSeconds() > 1.0f) {//if intro seems long af, change 20.0f to 1.0f for your testing purposes
+            wait = false;
+            window.clear();
+            window.display();
+        }
+    }
+
+    window.clear(sf::Color::Black);
+    window.draw(logoText);
+    window.draw(tagText);
+    window.draw(controlText);
+    window.draw(overText);
+    window.display();
+    wait = true;
     std::string x;
     while (wait) {
         while (window.pollEvent(event)) {
@@ -462,9 +516,11 @@ void Engine::playerName() {
                         nameText.setString(x);
                     }
                 }
-
+                window.clear();
+                window.display();
                 window.draw(logoText);
                 window.draw(overText);
+                window.draw(tagText);
                 window.draw(nameText);
                 window.display();
             }

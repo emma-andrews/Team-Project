@@ -150,3 +150,13 @@ std::vector<sf::IntRect> Animation::slime2() {
     }
     return vect;
 }
+
+std::vector<sf::IntRect> Animation::potion() {
+    std::vector<sf::IntRect> vect;
+    sf::IntRect jarSource(0, 0, 20, 22);
+    while (jarSource.left <= 80) {
+        vect.push_back(jarSource);
+        jarSource.left += 20;
+    }
+    return vect;
+}
