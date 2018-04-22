@@ -107,6 +107,7 @@ void Engine::start() {//starts the game
     levelFinished = false;//the level is not finished since it just started
     chestOpen = false;
     alreadyOpen = false;
+    isInvulnerable = false;
     exitOpen = false;
     levelLost = false;
     coin.coins.clear();
