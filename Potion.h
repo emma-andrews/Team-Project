@@ -20,13 +20,7 @@ private:
 public:
     Potion();
     sf::Clock rewardTimer;
-    int potionCollide(sf::Sprite player) {
-        if (player.getGlobalBounds().intersects(sSprite.getGlobalBounds())) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
+    int potionCollide(sf::Sprite player);
     bool getSpawn();
     sf::Time rewardLeft();
     void setSpawn(bool spawn);

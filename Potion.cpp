@@ -42,3 +42,12 @@ void Potion::playAnimation() {
         sClock.restart();
     }
 }
+
+int Potion::potionCollide(sf::Sprite player) {
+    if (player.getGlobalBounds().intersects(sSprite.getGlobalBounds())) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
