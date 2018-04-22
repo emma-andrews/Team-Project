@@ -39,7 +39,7 @@ public:
     Enemies();
     std::vector<Enemies> enemyVect;
     sf::Sprite getSprite();
-    int checkCollision(sf::Sprite player);
+    int checkCollision(sf::Sprite player, bool invulnerable);
     void moveLeft(float elapsedTime);
     void moveRight(float elapsedTime);
     void setPosition(std::vector<sf::RectangleShape> plats);

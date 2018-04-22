@@ -24,9 +24,6 @@ Player::Player() {
     pSprite.setScale(2,2);//scales sprite by 2 so it is 64 by 64
     pPosition.x = 50;//initial starting position
     pPosition.y = 920;
-
-    jumpBuffer.loadFromFile("jump_sound.wav");
-    chestBuffer.loadFromFile("chest_sound.wav");
 }
 
 //void Player::setSprite(sf::IntRect aniRect) {
@@ -63,9 +60,6 @@ void Player::jump() {
     pJump = true;//input to jump
     if(canJump) {//able to jump based on current position
         pVelocity.y = -12.0f;
-        jumpSound.setBuffer(jumpBuffer);
-        jumpSound.setVolume(70.f);
-        jumpSound.play();
         canJump = false;//unable to jump while already in a jump
     }
 }
@@ -216,10 +210,6 @@ int Player::getLives() {
 bool Player::checkInteraction(sf::Sprite chest) {
     if (pSprite.getGlobalBounds().intersects(chest.getGlobalBounds())) {
         //drop chance for either score increase or extra life
-        // add chest sound
-        chestSound.setBuffer(chestBuffer);
-        chestSound.setVolume(30.f);
-        chestSound.play();
         int chance = rand() % 2 + 1;
         std::cout << chance;
         if (chance == 1) {
@@ -251,4 +241,23 @@ int Player::getX() {
 
 int Player::getY() {
     return pPosition.y;
+}
+
+void Player::bounceBack(int direction) {
+    if (direction == 1) {//moving right when collided
+        pPosition.x -= pSpeed * 0.25f;
+        if (aniClock.getElapsedTime().asSeconds() > 0.1f) {
+            aniRect = animation.playerRHurt();
+            pSprite.setTextureRect(aniRect[0]);
+            aniClock.restart();
+        }
+    }
+    else if (direction == 2) {//moving left when collided
+        pPosition.x += pSpeed * 0.25f;
+        if (aniClock.getElapsedTime().asSeconds() > 0.1f) {
+            aniRect = animation.playerLHurt();
+            pSprite.setTextureRect(aniRect[0]);
+            aniClock.restart();
+        }
+    }
 }

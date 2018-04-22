@@ -13,8 +13,6 @@ private:
     sf::Sprite pSprite;
     sf::Texture pTexture;
     std::vector<sf::IntRect> aniRect;
-    sf::SoundBuffer jumpBuffer;
-    sf::SoundBuffer chestBuffer;
 
     Animation animation;
 
@@ -37,10 +35,10 @@ private:
 public:
     sf::Clock aniClock;
     sf::Time da;
-    sf::Sound jumpSound;
-    sf::Sound chestSound;
+
     bool rightLast;
     bool leftLast;
+    bool invulnerable;
 
     Player();
     //void setSprite(sf::IntRect aniRect);
@@ -60,6 +58,7 @@ public:
     bool checkInteraction(sf::Sprite chest);
     int getScore();
     void setScore(int num);
+    void bounceBack(int direction);
 };
 
 #endif //TEAMPROJECT_PLAYER_H

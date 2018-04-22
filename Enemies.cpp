@@ -23,7 +23,7 @@ Enemies::Enemies() {
     sf::IntRect slime2Rect(0, 0, 30, 32);
     int chance;
     chance = rand() % 3 + 1;
-    //std::cout << chance;
+    std::cout << chance;
     if (chance == 1) {
         if(!sTexture.loadFromFile("slime sheet.png")){
             std::cout<<"Could not load from file"<<std::endl;
@@ -34,6 +34,8 @@ Enemies::Enemies() {
         slime = true;
         bat = false;
         slime2 = false;
+
+
     }
     else if (chance == 2) {
         bTexture.loadFromFile("bat sheet.png");
@@ -81,24 +83,17 @@ void Enemies::setHome(int home) {
     this->home = home;
 }
 
-int Enemies::checkCollision(sf::Sprite player) {
+int Enemies::checkCollision(sf::Sprite player, bool invulnerable) {
     float ydifference;
     float xdifference;
     ydifference = eSprite.getGlobalBounds().top - (player.getGlobalBounds().top + player.getGlobalBounds().height);
     xdifference = (eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width) - (player.getGlobalBounds().left + player.getGlobalBounds().width);
-    bool collideLeft = (player.getGlobalBounds().top + player.getGlobalBounds().height) > eSprite.getGlobalBounds().top &&
-                       (player.getGlobalBounds().left + player.getGlobalBounds().width) > eSprite.getGlobalBounds().left &&
-                       (player.getGlobalBounds().left + player.getGlobalBounds().width) < eSprite.getGlobalBounds().left + 10;
-    bool collideRight = (player.getGlobalBounds().top + player.getGlobalBounds().height) > eSprite.getGlobalBounds().top &&
-                        (player.getGlobalBounds().left) < eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width &&
-                        (player.getGlobalBounds().left) > eSprite.getGlobalBounds().left + eSprite.getGlobalBounds().width - 10;
-    if (collideLeft || collideRight) {
-        return 1;
-    }
-    else if (ydifference <= 10 && ydifference >= -10 && xdifference <= 20 && xdifference >= -20) {
+    if (ydifference <= 10 && ydifference >= -10 && xdifference <= 20 && xdifference >= -20 && !invulnerable) {
         return 2;
     }
-
+    else if (player.getGlobalBounds().intersects(eSprite.getGlobalBounds()) && !invulnerable) {
+        return 1;
+    }
     else {
         return 0;
     }
@@ -111,7 +106,7 @@ int Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangle
     if (!killed) {
         engage(elapsedTime, player->getSprite());
     }
-    int collision = checkCollision((*player).getSprite());
+    int collision = checkCollision((*player).getSprite(), player->invulnerable);
     int pX = (*player).getX();
     int pY = (*player).getY();
     if (!killed) {
@@ -135,6 +130,8 @@ int Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangle
         x += 100;
         y += 100;
         killed = true;
+        player->invulnerable = true;
+        return 2;
     }
     else if (ePosition.x < plats[home].getPosition().x - 20 && !killed) {
         spawn(plats);
@@ -173,6 +170,14 @@ int Enemies::update(Player *player, float elapsedTime, std::vector<sf::Rectangle
 
     if (!killed) {
         eSprite.setPosition(ePosition);
+    }
+    if (collision == 1) {
+        player->invulnerable = true;
+        return 1;
+    }
+    else if (collision == 0) {
+        player->invulnerable = false;
+        return 0;
     }
 }
 

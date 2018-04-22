@@ -22,6 +22,10 @@ private:
     sf::SoundBuffer coinBuffer;
     sf::Sound coinSound;
     sf::Music music;
+    sf::Sound jumpSound;
+    sf::Sound chestSound;
+    sf::SoundBuffer jumpBuffer;
+    sf::SoundBuffer chestBuffer;
 
     sf::Text levelText;
     sf::Text livesText;

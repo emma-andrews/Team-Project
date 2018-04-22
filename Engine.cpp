@@ -20,6 +20,8 @@ Engine::Engine() {
     music.openFromFile("Main Theme.wav");
     music.setLoop(true);
     music.play();
+    chestBuffer.loadFromFile("chest_sound.wav");
+    jumpBuffer.loadFromFile("jump_sound.wav");
 
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;//gets dimensions for game window
@@ -151,6 +153,8 @@ void Engine::start() {//starts the game
 
 void Engine::nextLevel() {
     //set up for next level with message saying level complete, etc.
+    std::cout << "Level " << level.levelNum << " completed!";
+    std::cout << "Total score: " << score << std::endl;
     player->setPosition();
     for (int i = 0; i < 5; i++) {
         enemies[i].killed = false;
@@ -159,6 +163,7 @@ void Engine::nextLevel() {
 }
 bool open = true;
 bool stuck = false;
+bool jumpAlreadyPlayed;
 void Engine::input() {//calculates user inputs and what actions are performed based on input
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -184,9 +189,17 @@ void Engine::input() {//calculates user inputs and what actions are performed ba
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             player->jump();
+            if (!jumpAlreadyPlayed) {
+                jumpSound.setBuffer(jumpBuffer);
+                jumpSound.setVolume(70.f);
+                jumpSound.setLoop(false);
+                jumpSound.play();
+                jumpAlreadyPlayed = true;
+            }
         }
         else {
             player->stopJump();
+            jumpAlreadyPlayed = false;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && !open) {
             window.close();
@@ -233,6 +246,11 @@ void Engine::update(float dtAsSeconds, float totalTime) {
 
     if (!alreadyOpen) {
         chestOpen = player->checkInteraction(chest.getChestSprite());
+        if (chestOpen) {
+            chestSound.setBuffer(chestBuffer);
+            chestSound.setVolume(30.f);
+            chestSound.play();
+        }
     }
     if (chestOpen) {
         chest.playAnimation();
@@ -242,32 +260,25 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         coin.coins[i].update();
     }
     chest.update();
-    int collision;
+    int collision = 0;
     std::vector<sf::IntRect> rect;
+
     // Update the enemies status
     for (unsigned i = 0; i < 5; i++) {
         collision = enemies[i].update(player, dtAsSeconds, level.platforms);
         if (collision == 1) {
             player->setLives(player->getLives() - 1);
-            if (player->rightLast && player->aniClock.getElapsedTime().asSeconds() > 0.1f) {
-                rect = animation.playerRHurt();
-                player->getSprite().setTextureRect(rect[0]);
-                player->aniClock.restart();
+            if(player->rightLast) {
+                player->bounceBack(1);
             }
-            else if (player->leftLast && player->aniClock.getElapsedTime().asSeconds() > 0.1f) {
-                rect = animation.playerLHurt();
-                player->getSprite().setTextureRect(rect[0]);
-                player->aniClock.restart();
+            else if (player->leftLast) {
+                player->bounceBack(2);
             }
         }
         else if (collision == 2) {
             score += 150;
         }
     }
-    if (player->getLives() == 0) {
-        levelLost = true;
-    }
-
     score = player->getScore();
     std::ostringstream s1;
     s1 << "Score: " << score;
@@ -282,10 +293,11 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     remainText.setString(s3.str());
 
     playerLives = player->getLives();
-    std::cout << playerLives;
+    if (playerLives < 3) {
+        std::cout << playerLives;
+    }
     if (player->getLives() == 0) {
         levelLost = true;
-        wait = true;
     }
 
     int x = 110;
@@ -307,6 +319,7 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         }
     }
     if (levelLost) {
+        wait = true;
         gameOver();
     }
 }
@@ -366,13 +379,15 @@ void Engine::gameOver() {
     sf::Text overText;
     overText.setFont(font);
     overText.setFillColor(sf::Color::Red);
-    overText.setString("GAME OVER\nRetry?\nYes: Y\tNo: N");
+    overText.setString("GAME OVER\nExit?\nYes: Y\tNo: N");
     overText.setCharacterSize(40);
-    overText.setPosition(700, 540);
+    overText.setPosition(800, 440);
     window.draw(overText);
+    window.display();
 
     while (wait) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
+            wait = false;
             window.close();
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
