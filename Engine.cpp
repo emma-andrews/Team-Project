@@ -118,6 +118,8 @@ void Engine::start() {//starts the game
     level.generatePlat();//generates the random platforms of the level
     chest.setPosition(level.platforms[7].getPosition());
 
+    potionSpawn = (rand() % 100) + 1;
+    potionHome = (rand() % 17) + 1;
 
     for (int i = 0; i < 6; i++) {
         coin.coins.push_back(coin);
@@ -127,6 +129,8 @@ void Engine::start() {//starts the game
         n++;
         coin.coins[i].setPosition(level.platforms[n].getPosition());
     }
+
+
 
     int numbers[5];
     // Home generation
@@ -261,9 +265,20 @@ void Engine::update(float dtAsSeconds, float totalTime) {
         coin.coins[i].update();
     }
     chest.update();
-    potion.update();
     int collision = 0;
     std::vector<sf::IntRect> rect;
+
+    if (potionSpawn % 3 == 0) {
+        potion.update(level.platforms[potionHome].getPosition());
+        if (potion.potionCollide(player->getSprite()) > 0) {
+            potion.rewardTimer.restart();
+            player->setSpeed(800);
+        }
+
+        if (potion.rewardTimer.getElapsedTime().asSeconds() > 2.0f) {
+            player->setSpeed(400);
+        }
+    }
 
     // Update the enemies status
     for (unsigned i = 0; i < 5; i++) {
@@ -343,7 +358,9 @@ void Engine::draw() {//draws everything to the screen, called every frame in upd
         window.draw(player->getSprite());//the player sprite
         //window.draw(coin.getSprite());//the coin sprite
         window.draw(chest.getChestSprite());
-        window.draw(potion.getSprite());
+        if (potionSpawn % 3 == 0) {
+            window.draw(potion.getSprite());
+        }
 
         for (unsigned i = 0; i < level.platforms.size(); i++) {
             window.draw(level.platforms[i]);//each individual platform that was generated

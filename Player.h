@@ -51,6 +51,7 @@ public:
     void stopLeft();
     void stopRight();
     void jump();
+    void setSpeed(int speed);
     void stopJump();
     void update(float elapsedTime, int collision, std::vector<sf::RectangleShape> plats);
     void setLives(int num);

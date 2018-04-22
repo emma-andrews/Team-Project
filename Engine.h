@@ -47,6 +47,8 @@ private:
     Coin coin;
     Chest chest;
     Enemies enemies[5];
+    int potionSpawn;
+    int potionHome;
     Animation animation;
     Potion potion;
 

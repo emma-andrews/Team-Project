@@ -5,12 +5,19 @@ Potion::Potion() {
     sTexture.loadFromFile("potion sheet.png");
     sSprite.setTexture(sTexture);
     sSprite.setTextureRect(temp);
-
     sFrame = 0;
 }
 
 sf::Sprite Potion::getSprite() {
     return sSprite;
+}
+
+void Potion::setSpawn(bool spawn) {
+    willSpawn = spawn;
+}
+
+bool Potion::getSpawn() {
+    return willSpawn;
 }
 
 void Potion::setPosition(sf::Vector2f platPosition) {
@@ -19,7 +26,8 @@ void Potion::setPosition(sf::Vector2f platPosition) {
     sPosition.y = platPosition.y - sSprite.getGlobalBounds().height;
 }
 
-void Potion::update() {
+void Potion::update(sf::Vector2f plat) {
+    setPosition(plat);
     sSprite.setPosition(sPosition);
 }
 

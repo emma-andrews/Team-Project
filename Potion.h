@@ -14,13 +14,25 @@ private:
     sf::Vector2f sPosition;
 
     int sFrame;
+    bool willSpawn;
     Animation animation;
 
 public:
     Potion();
+    sf::Clock rewardTimer;
+    int potionCollide(sf::Sprite player) {
+        if (player.getGlobalBounds().intersects(sSprite.getGlobalBounds())) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    bool getSpawn();
+    sf::Time rewardLeft();
+    void setSpawn(bool spawn);
     sf::Sprite getSprite();
     void setPosition(sf::Vector2f platPosition);
-    void update();
+    void update(sf::Vector2f plat);
     void playAnimation();
 };
 

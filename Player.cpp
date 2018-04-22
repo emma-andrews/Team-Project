@@ -64,6 +64,10 @@ void Player::jump() {
     }
 }
 
+void Player::setSpeed(int speed) {
+    this->pSpeed = speed;
+}
+
 void Player::stopJump() {
     pJump = false;//no input to jump
     if (pVelocity.y < -6.0f) {
@@ -150,10 +154,10 @@ void Player::update(float elapsedTime, int collision, std::vector<sf::RectangleS
         bool collideBottom = pPosition.y > plats[collision].getGlobalBounds().top;
         bool collideLeft = (pPosition.y + pSprite.getGlobalBounds().height) > plats[collision].getGlobalBounds().top &&
                            (pPosition.x + pSprite.getGlobalBounds().width) > plats[collision].getGlobalBounds().left &&
-                           (pPosition.x + pSprite.getGlobalBounds().width) < plats[collision].getGlobalBounds().left + 10;
+                           (pPosition.x + pSprite.getGlobalBounds().width) < plats[collision].getGlobalBounds().left + 5;
         bool collideRight = (pPosition.y + pSprite.getGlobalBounds().height) > plats[collision].getGlobalBounds().top &&
                             (pPosition.x) < plats[collision].getGlobalBounds().left + plats[collision].getGlobalBounds().width &&
-                            (pPosition.x) > plats[collision].getGlobalBounds().left + plats[collision].getGlobalBounds().width - 10;
+                            (pPosition.x) > plats[collision].getGlobalBounds().left + plats[collision].getGlobalBounds().width - 5;
         if (collideBottom) {
             pPosition.y = plats[collision].getGlobalBounds().top + plats[collision].getGlobalBounds().height;
             pVelocity.y = 6.0f;
