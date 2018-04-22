@@ -11,6 +11,7 @@
 
 class Engine {
 private:
+    sf::Clock invulnerableTimer;
     sf::RenderWindow window;
     sf::Sprite backgroundSprite;
     sf::Texture backgroundTexture;
@@ -48,6 +49,7 @@ private:
     Animation animation;
 
     bool wait;
+    bool isInvulnerable;
     bool kill;
     bool levelFinished;
     bool levelLost;

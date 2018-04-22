@@ -107,6 +107,7 @@ void Engine::start() {//starts the game
     levelFinished = false;//the level is not finished since it just started
     chestOpen = false;
     alreadyOpen = false;
+    isInvulnerable = false;
     exitOpen = false;
     levelLost = false;
     coin.coins.clear();
@@ -267,12 +268,20 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     for (unsigned i = 0; i < 5; i++) {
         collision = enemies[i].update(player, dtAsSeconds, level.platforms);
         if (collision == 1) {
-            player->setLives(player->getLives() - 1);
-            if(player->rightLast) {
-                player->bounceBack(1);
-            }
-            else if (player->leftLast) {
-                player->bounceBack(2);
+            if (isInvulnerable) {
+                sf::Time timePassed = invulnerableTimer.getElapsedTime();
+                if (timePassed.asSeconds() > 1.5f) {
+                    isInvulnerable = false;
+                }
+            } else {
+                player->setLives(player->getLives() - 1);
+                isInvulnerable = true;
+                invulnerableTimer.restart();
+                //if (player->rightLast) {
+                    //player->bounceBack(1);
+                //} else if (player->leftLast) {
+                    //player->bounceBack(2);
+                //}
             }
         }
         else if (collision == 2) {
@@ -301,6 +310,8 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     }
 
     int x = 110;
+    // Clear, or else it infinitely populates
+    pHearts.clear();
     for (int i = 0; i < playerLives; i++) {
         x += 40;
         lPosition.x = x;
