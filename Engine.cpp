@@ -4,23 +4,25 @@
 #include <iostream>
 
 Engine::Engine() {
-    score = 0;
-    startup = true;
-    flash = false;
-    wait = false;
+    score = 0;//initializes score to 0
+    startup = true;//initializes startup to true
+    flash = false;//initializes flash to false
+    wait = false;//initializes wait to false
     //alreadyOpen = false;
 
-    player = new Player();
+    player = new Player();//instantiates the player class
 
-    lTexture.loadFromFile("heart.png");
+    lTexture.loadFromFile("heart.png");//loads the texture for the lives and sets it for the sprite for the lives
     lSprite.setTexture(lTexture);
-    lSprite.setScale(4,4);
+    lSprite.setScale(4,4);//scales it by 4
 
-    coinBuffer.loadFromFile("coin_sound.wav");
+    coinBuffer.loadFromFile("coin_sound.wav");//loads all the music files that are going to be played throughout the game
     music.openFromFile("Main Theme.wav");
-    music.setLoop(true);
-    music.play();
-    chestBuffer.loadFromFile("chest_sound.wav");
+    startTheme.openFromFile("Story.wav");
+    startTheme.setLoop(true);//sets the opening music to loop and play
+    startTheme.play();
+
+    chestBuffer.loadFromFile("chest_sound.wav");//loads other music files that will be player throughout the game
     jumpBuffer.loadFromFile("jump_sound.wav");
 
     sf::Vector2f resolution;
@@ -28,10 +30,10 @@ Engine::Engine() {
     resolution.y = sf::VideoMode::getDesktopMode().height;
 
     window.create(sf::VideoMode(resolution.x, resolution.y), "Team Project", sf::Style::Resize);//creates render window which the game will be displayed on
-    //creates the window
+    //creates the window, most windows will use a resolution of 1920 by 1080
 
-    backgroundTexture.loadFromFile("cyberpunk-street.png");//608 by 192
-    backgroundSprite.setTexture(backgroundTexture);
+    backgroundTexture.loadFromFile("cyberpunk-street.png");//608 by 192 file
+    backgroundSprite.setTexture(backgroundTexture);//sets the texture of the background to the image
 
     float xScale = resolution.x / 608;//set scales so background will stretch to fit any screen
     float yScale = resolution.y / 192;
@@ -50,7 +52,7 @@ Engine::Engine() {
     remainText.setFont(font);
     openText.setFont(font);
 
-    livesText.setString("Lives: ");
+    livesText.setString("Lives: ");//sets the strings for the texts that will not change throughout the game
     finishText.setString("Level Complete!");
     endplatText.setString("FINISH");
     closeText.setString("Do you want to exit the game?\n\t\tYES: Y\tNO: N");
@@ -86,7 +88,7 @@ Engine::Engine() {
     livesText.setPosition(20, 50);
     scoreText.setPosition(20, 80);
     timeText.setPosition(20, 110);
-    finishText.setPosition(900, 500);//temporary position, needs to be updated to be somewhat in the middle of the screen
+    finishText.setPosition(900, 500);
     endplatText.setPosition(1705, 170);
     closeText.setPosition(560, 540);
     stuckText.setPosition(560, 540);
@@ -96,30 +98,33 @@ Engine::Engine() {
 }
 
 void Engine::start() {//starts the game
-    if (startup) {
-        wait = true;
-        playerName();
-        startup = false;
+    if (startup) {//will only be called when the game is first launched
+        wait = true;//pauses the game
+        playerName();//calls on the logo screen and story screen to appear
+        startTheme.stop();//stops the start screen music from playing
+        music.setLoop(true);//main background music is able to be looped
+        music.play();//main background music plays
+        startup = false;//cannot call startup again during the game
     }
-    sf::Clock clock;
+    sf::Clock clock;//clocks start to run
     sf::Clock gameClock;
 
     levelFinished = false;//the level is not finished since it just started
-    chestOpen = false;
-    alreadyOpen = false;
-    isInvulnerable = false;
-    exitOpen = false;
-    levelLost = false;
-    coin.coins.clear();
-    lGameTime = 0;
-    wait = false;
+    chestOpen = false;//the chest is not open since the level just started
+    alreadyOpen = false;//the chest is not already open
+    isInvulnerable = false;//player is not invulnerable
+    exitOpen = false;//the exit is not open
+    levelLost = false;//the level is not lost
+    coin.coins.clear();//the coin vector is cleared to avoid any vector
+    lGameTime = 0;//the game time initially is 0
+    wait = false;//no longer waiting
 
-    chest.resetSprite();
+    chest.resetSprite();//resetting the chest sprite so it is not opened when a new level begins
     level.generatePlat();//generates the random platforms of the level
-    chest.setPosition(level.platforms[7].getPosition());
+    chest.setPosition(level.platforms[7].getPosition());//sets the chest onto the 7th platform in the vector of platforms
 
-    potionSpawn = (rand() % 100) + 1;
-    potionHome = (rand() % 17) + 1;
+    potionSpawn = (rand() % 100) + 1;//potion has a random spawn from 1 to 101
+    potionHome = (rand() % 17) + 1;//potion home is random from
 
     for (int i = 0; i < 6; i++) {
         coin.coins.push_back(coin);
@@ -129,8 +134,6 @@ void Engine::start() {//starts the game
         n++;
         coin.coins[i].setPosition(level.platforms[n].getPosition());
     }
-
-
 
     int numbers[5];
     // Home generation
@@ -347,6 +350,9 @@ void Engine::update(float dtAsSeconds, float totalTime) {
     }
     if (levelLost) {
         wait = true;
+        music.stop();
+        gameOverTheme.setLoop(true);
+        gameOverTheme.play();
         gameOver();
     }
 }
@@ -421,6 +427,8 @@ void Engine::gameOver() {
             window.close();
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+            gameOverTheme.stop();
+            music.play();
             wait = false;
             window.clear();
             start();

@@ -21,13 +21,16 @@ private:
     sf::Sprite lSprite;
     sf::Texture lTexture;
     sf::Vector2f lPosition;
+
     sf::SoundBuffer coinBuffer;
-    sf::Sound coinSound;
-    sf::Music music;
-    sf::Sound jumpSound;
-    sf::Sound chestSound;
     sf::SoundBuffer jumpBuffer;
     sf::SoundBuffer chestBuffer;
+    sf::Sound coinSound;
+    sf::Sound jumpSound;
+    sf::Sound chestSound;
+    sf::Music music;
+    sf::Music startTheme;
+    sf::Music gameOverTheme;
 
     sf::Text levelText;
     sf::Text livesText;
@@ -47,8 +50,7 @@ private:
     Coin coin;
     Chest chest;
     Enemies enemies[5];
-    int potionSpawn;
-    int potionHome;
+
     Animation animation;
     Potion potion;
 
@@ -64,7 +66,10 @@ private:
     bool exitOpen;
     int playerLives;
     int score;
+    int potionSpawn;
+    int potionHome;
     float lGameTime;
+
     void input();
     void update(float dtAsSeconds, float totalTime);
     void draw();
