@@ -56,6 +56,7 @@ Levels::Levels() {
     ground.setPosition(gPosition);//sets the position of each static platform
     finishPlat.setPosition(fPosition);
     enemyDead.setPosition(enemyPosition);
+    staticStair.setPosition(ssPosition);
 
     platforms.push_back(ground);//pushes the ground and the finish platform to the vector containing all platforms
     platforms.push_back(finishPlat);

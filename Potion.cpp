@@ -21,7 +21,7 @@ bool Potion::getSpawn() {
 }
 
 void Potion::setPosition(sf::Vector2f platPosition) {
-    //set position on platform 8 in engine, check interaction with the potion in player & engine (basically just copy all of chest except for animations)
+    //set position on platform 16 in engine, check interaction with the potion in player & engine (basically just copy all of chest except for animations)
     sPosition.x = platPosition.x + sSprite.getGlobalBounds().width;
     sPosition.y = platPosition.y - sSprite.getGlobalBounds().height;
 }
@@ -50,4 +50,8 @@ int Potion::potionCollide(sf::Sprite player) {
     else {
         return 0;
     }
+}
+
+void Potion::potionHide() {
+    sSprite.setPosition(2000, 1400);
 }

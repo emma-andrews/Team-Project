@@ -24,6 +24,7 @@ public:
     bool getSpawn();
     sf::Time rewardLeft();
     void setSpawn(bool spawn);
+    void potionHide();
     sf::Sprite getSprite();
     void setPosition(sf::Vector2f platPosition);
     void update(sf::Vector2f plat);

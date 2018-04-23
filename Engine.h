@@ -55,6 +55,8 @@ private:
     Potion potion;
 
     bool wait;
+    bool retry;
+    bool activated;
     bool isInvulnerable;
     bool kill;
     bool levelFinished;

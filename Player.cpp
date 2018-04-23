@@ -215,7 +215,6 @@ bool Player::checkInteraction(sf::Sprite chest) {
     if (pSprite.getGlobalBounds().intersects(chest.getGlobalBounds())) {
         //drop chance for either score increase or extra life
         int chance = rand() % 2 + 1;
-        std::cout << chance;
         if (chance == 1) {
             //increase life count
             lives++;
